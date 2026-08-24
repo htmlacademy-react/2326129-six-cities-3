@@ -1,7 +1,7 @@
 # Личный проект «Шесть городов»
 
-* Студент: [Михаил Яковенко](https://up.htmlacademy.ru/react-individual/3/user/2326129).
-* Наставник: `Неизвестно`.
+- Студент: [Михаил Яковенко](https://up.htmlacademy.ru/react-individual/3/user/2326129).
+- Наставник: [Александр Сударев](https://htmlacademy.ru/profile/id1152185).
 
 ---
 
