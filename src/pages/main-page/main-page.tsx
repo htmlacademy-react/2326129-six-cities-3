@@ -1,6 +1,6 @@
 import { CityCard } from '../../components/city-card/city-card';
-import { LocationItems } from './components/location-items';
-import { SortingForm } from './components/sorting/sorting-form';
+import { LocationItems } from './components/location-items/location-items';
+import { SortingForm } from './components/sorting-form/sorting-form';
 
 const cities = ['Paris', 'Cologne', 'Brussels', 'Amsterdam', 'Hamburg', 'Dusseldorf'];
 
@@ -65,7 +65,7 @@ function MainScreen({ offersCount }: MainScreenProps): JSX.Element {
               < CityCardsList />
             </section>
             <div className="cities__right-section">
-              <section className="cities__map map"></section>
+              <section className="cities__map map" />
             </div>
           </div>
         </div>

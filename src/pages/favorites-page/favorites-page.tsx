@@ -61,7 +61,7 @@ function FavoritesPage() {
                         </div>
                         <button className="place-card__bookmark-button place-card__bookmark-button--active button" type="button">
                           <svg className="place-card__bookmark-icon" width="18" height="19">
-                            <use xlinkHref="#icon-bookmark"></use>
+                            <use xlinkHref="#icon-bookmark" />
                           </svg>
                           <span className="visually-hidden">In bookmarks</span>
                         </button>
@@ -93,7 +93,7 @@ function FavoritesPage() {
                         </div>
                         <button className="place-card__bookmark-button place-card__bookmark-button--active button" type="button">
                           <svg className="place-card__bookmark-icon" width="18" height="19">
-                            <use xlinkHref="#icon-bookmark"></use>
+                            <use xlinkHref="#icon-bookmark" />
                           </svg>
                           <span className="visually-hidden">In bookmarks</span>
                         </button>
@@ -136,7 +136,7 @@ function FavoritesPage() {
                         </div>
                         <button className="place-card__bookmark-button place-card__bookmark-button--active button" type="button">
                           <svg className="place-card__bookmark-icon" width="18" height="19">
-                            <use xlinkHref="#icon-bookmark"></use>
+                            <use xlinkHref="#icon-bookmark" />
                           </svg>
                           <span className="visually-hidden">In bookmarks</span>
                         </button>

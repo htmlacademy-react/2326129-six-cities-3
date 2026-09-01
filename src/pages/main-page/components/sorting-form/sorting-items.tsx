@@ -1,5 +1,5 @@
 type SortingProps = {
-  activeSort: string;
+  activeSort: 'popular' | 'price-low' | 'price-high' | 'top-rated';
 }
 
 
