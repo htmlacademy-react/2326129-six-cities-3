@@ -1,3 +1,4 @@
+import { Helmet } from 'react-helmet-async';
 import { CityCard } from '../../components/city-card/city-card';
 import { LocationItems } from './components/location-items/location-items';
 import { SortingForm } from './components/sorting-form/sorting-form';
@@ -21,6 +22,9 @@ function CityCardsList(): JSX.Element {
 function MainScreen({ offersCount }: MainScreenProps): JSX.Element {
   return (
     <div className="page page--gray page--main">
+      <Helmet>
+        <title>6 cities</title>
+      </Helmet>
       <main className="page__main page__main--index">
         <h1 className="visually-hidden">Cities</h1>
         <div className="tabs">

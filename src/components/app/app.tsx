@@ -6,25 +6,39 @@ import { OfferPage } from '../../pages/offer-page/offer-page';
 import { Layout } from '../layout/layout';
 import { PageNotFound } from '../../pages/page-not-found/page-not-found';
 import ScrollToTop from '../scroll-to-top/scroll-to-top';
+import PrivateRoute from '../private-route/private-route';
+import { AppRoute} from '../../const';
+import { HelmetProvider } from 'react-helmet-async';
+import { getAuthorizationStatus } from '../../authorization-status';
 
 function App(): JSX.Element {
   const offersCount = 5;
+  const authorizationStatus = getAuthorizationStatus();
   return (
-    <BrowserRouter>
-      <ScrollToTop />
-      <Routes>
-        <Route path="/" element={<Layout />}>
-          <Route index element={<MainScreen offersCount={offersCount} />} />
-          <Route path="favorites" element={<FavoritesPage />} />
-          <Route path="offer">
-            <Route index element={<OfferPage />} />
-            <Route path=":id" element={<OfferPage />} />
+    <HelmetProvider>
+      <BrowserRouter>
+        <ScrollToTop />
+        <Routes>
+          <Route path={AppRoute.Root} element={<Layout />}>
+            <Route index element={<MainScreen offersCount={offersCount} />} />
+            <Route path={AppRoute.Favorites} element={
+              <PrivateRoute authorizationStatus={authorizationStatus}>
+                <FavoritesPage />
+              </PrivateRoute>
+            }
+            />
+            <Route path={AppRoute.Offer} element={<OfferPage />}/>
+            <Route path={AppRoute.Login} element={(
+              <PrivateRoute authorizationStatus={authorizationStatus} isReverse>
+                <LoginPage />
+              </PrivateRoute>
+            )}
+            />
           </Route>
-        </Route>
-        <Route path="/login" element={<LoginPage />} />
-        <Route path="*" element={<PageNotFound />} />
-      </Routes>
-    </BrowserRouter>
+          <Route path="*" element={<PageNotFound />} />
+        </Routes>
+      </BrowserRouter>
+    </HelmetProvider>
   );
 }
 
