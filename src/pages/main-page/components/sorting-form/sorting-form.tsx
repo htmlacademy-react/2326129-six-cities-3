@@ -7,7 +7,7 @@ function SortingForm() {
       <span className="places__sorting-type" tabIndex={0}>
         Popular
         <svg className="places__sorting-arrow" width="7" height="4">
-          <use xlinkHref="#icon-arrow-select"></use>
+          <use xlinkHref="#icon-arrow-select" />
         </svg>
       </span>
       <SortingItems activeSort='popular'/>
