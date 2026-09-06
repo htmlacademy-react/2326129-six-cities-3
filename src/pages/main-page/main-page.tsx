@@ -5,7 +5,7 @@ import { SortingForm } from './components/sorting-form/sorting-form';
 
 const cities = ['Paris', 'Cologne', 'Brussels', 'Amsterdam', 'Hamburg', 'Dusseldorf'];
 
-type MainScreenProps = {
+type MainPageProps = {
   offersCount: number;
 }
 
@@ -19,7 +19,7 @@ function CityCardsList(): JSX.Element {
   );
 }
 
-function MainScreen({ offersCount }: MainScreenProps): JSX.Element {
+function MainPage({ offersCount }: MainPageProps): JSX.Element {
   return (
     <div className="page page--gray page--main">
       <Helmet>
@@ -50,4 +50,4 @@ function MainScreen({ offersCount }: MainScreenProps): JSX.Element {
   );
 }
 
-export {MainScreen};
+export {MainPage};

@@ -4,21 +4,35 @@ import { OfferItems } from './components/offer-items/offer-items';
 import { useParams } from 'react-router-dom';
 import { getAuthorizationStatus } from '../../authorization-status';
 import { AuthorizationStatus } from '../../const';
+import { ApartmentType } from './types/types';
+import { Offer } from './types/types';
+import { PageNotFound } from '../page-not-found/page-not-found';
 
-const galleryImages = [
-  'img/room.jpg',
-  'img/apartment-01.jpg',
-  'img/apartment-02.jpg',
-  'img/apartment-03.jpg',
-  'img/studio-01.jpg',
-  'img/apartment-01.jpg'
-];
+type OfferPageProps = {
+  offers: Offer[];
+}
 
-function OfferPage() {
-  const params = useParams();
-  // eslint-disable-next-line no-console
-  console.log(params);
+function capitalizeFirstLetterType(str: ApartmentType): string {
+  if (!str) {
+    return '';
+  }
+  return str.charAt(0).toUpperCase() + str.slice(1);
+}
+
+function OfferPage({ offers }: OfferPageProps) {
+  const { id } = useParams();
   const authorizationStatus = getAuthorizationStatus();
+  const currentOffer: Offer | undefined = offers.find((offer) => offer.id === id);
+
+  if(!currentOffer) {
+    return <PageNotFound />;
+  }
+
+  const { images, isPremium, title, rating, type, bedrooms, amountAdults, reviews = [], host, description } = currentOffer;
+
+  const bedroomsAmount = `${bedrooms} ${bedrooms === 1 ? 'Bedroom' : 'Bedrooms'}`;
+  const adultsAmount = `Max ${amountAdults} ${amountAdults === 1 ? 'adult' : 'adults'}`;
+
 
   return (
     <div className="page">
@@ -28,16 +42,16 @@ function OfferPage() {
       <main className="page__main page__main--offer">
         <section className="offer">
           <div className="offer__gallery-container container">
-            <OfferGallery images={galleryImages} />
+            <OfferGallery images={images} />
           </div>
           <div className="offer__container container">
             <div className="offer__wrapper">
               <div className="offer__mark">
-                <span>Premium</span>
+                <span>{isPremium && 'Premium'}</span>
               </div>
               <div className="offer__name-wrapper">
                 <h1 className="offer__name">
-                  Beautiful &amp; luxurious studio at great location
+                  {title}
                 </h1>
                 <button className="offer__bookmark-button button" type="button">
                   <svg className="offer__bookmark-icon" width="31" height="33">
@@ -48,24 +62,24 @@ function OfferPage() {
               </div>
               <div className="offer__rating rating">
                 <div className="offer__stars rating__stars">
-                  <span style={{ width: '80%' }}></span>
+                  <span style={{ width: `${rating / 5 * 100}%` }}></span>
                   <span className="visually-hidden">Rating</span>
                 </div>
-                <span className="offer__rating-value rating__value">4.8</span>
+                <span className="offer__rating-value rating__value">{rating}</span>
               </div>
               <ul className="offer__features">
                 <li className="offer__feature offer__feature--entire">
-                  Apartment
+                  {capitalizeFirstLetterType(type)}
                 </li>
                 <li className="offer__feature offer__feature--bedrooms">
-                  3 Bedrooms
+                  {bedroomsAmount}
                 </li>
                 <li className="offer__feature offer__feature--adults">
-                  Max 4 adults
+                  {adultsAmount}
                 </li>
               </ul>
               <div className="offer__price">
-                <b className="offer__price-value">&euro;120</b>
+                <b className="offer__price-value">&euro;{currentOffer.price}</b>
                 <span className="offer__price-text">&nbsp;night</span>
               </div>
               <div className="offer__inside">
@@ -76,49 +90,48 @@ function OfferPage() {
                 <h2 className="offer__host-title">Meet the host</h2>
                 <div className="offer__host-user user">
                   <div className="offer__avatar-wrapper offer__avatar-wrapper--pro user__avatar-wrapper">
-                    <img className="offer__avatar user__avatar" src="img/avatar-angelina.jpg" width="74" height="74" alt="Host avatar" />
+                    <img className="offer__avatar user__avatar" src={host.avatar} width="74" height="74" alt="Host avatar" />
                   </div>
                   <span className="offer__user-name">
-                    Angelina
+                    {host.name}
                   </span>
                   <span className="offer__user-status">
-                    Pro
+                    {host.isPro && 'Pro'}
                   </span>
                 </div>
                 <div className="offer__description">
                   <p className="offer__text">
-                    A quiet cozy and picturesque that hides behind a a river by the unique lightness of Amsterdam. The building is green and from 18th century.
-                  </p>
-                  <p className="offer__text">
-                    An independent House, strategically located between Rembrand Square and National Opera, but where the bustle of the city comes to rest in this alley flowery and colorful.
+                    {description}
                   </p>
                 </div>
               </div>
               <section className="offer__reviews reviews">
                 <h2 className="reviews__title">Reviews &middot; <span className="reviews__amount">1</span></h2>
                 <ul className="reviews__list">
-                  <li className="reviews__item">
-                    <div className="reviews__user user">
-                      <div className="reviews__avatar-wrapper user__avatar-wrapper">
-                        <img className="reviews__avatar user__avatar" src="img/avatar-max.jpg" width="54" height="54" alt="Reviews avatar" />
-                      </div>
-                      <span className="reviews__user-name">
-                        Max
-                      </span>
-                    </div>
-                    <div className="reviews__info">
-                      <div className="reviews__rating rating">
-                        <div className="reviews__stars rating__stars">
-                          <span style={{ width: '80%' }}></span>
-                          <span className="visually-hidden">Rating</span>
+                  {reviews.map((review) => (
+                    <li key={review.username + review.date} className="reviews__item">
+                      <div className="reviews__user user">
+                        <div className="reviews__avatar-wrapper user__avatar-wrapper">
+                          <img className="reviews__avatar user__avatar" src={review.avatar} width="54" height="54" alt="Reviews avatar" />
                         </div>
+                        <span className="reviews__user-name">
+                          {review.username}
+                        </span>
                       </div>
-                      <p className="reviews__text">
-                        A quiet cozy and picturesque that hides behind a a river by the unique lightness of Amsterdam. The building is green and from 18th century.
-                      </p>
-                      <time className="reviews__time" dateTime="2019-04-24">April 2019</time>
-                    </div>
-                  </li>
+                      <div className="reviews__info">
+                        <div className="reviews__rating rating">
+                          <div className="reviews__stars rating__stars">
+                            <span style={{ width: `${(review.rating / 5) * 100}%` }}></span>
+                            <span className="visually-hidden">Rating</span>
+                          </div>
+                        </div>
+                        <p className="reviews__text">
+                          {review.text}
+                        </p>
+                        <time className="reviews__time" dateTime="2019-04-24">April 2019</time>
+                      </div>
+                    </li>
+                  ))}
                 </ul>
                 {authorizationStatus === AuthorizationStatus.Auth ? (
                   <form className="reviews__form form" action="#" method="post">

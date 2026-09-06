@@ -1,6 +1,6 @@
 import { FavoritesPage } from '../../pages/favorites-page/favorites-page';
 import { LoginPage } from '../../pages/login-page/login-page';
-import { MainScreen } from '../../pages/main-page/main-page';
+import { MainPage } from '../../pages/main-page/main-page';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import { OfferPage } from '../../pages/offer-page/offer-page';
 import { Layout } from '../layout/layout';
@@ -10,8 +10,13 @@ import PrivateRoute from '../private-route/private-route';
 import { AppRoute} from '../../const';
 import { HelmetProvider } from 'react-helmet-async';
 import { getAuthorizationStatus } from '../../authorization-status';
+import { Offer } from '../../pages/offer-page/types/types';
 
-function App(): JSX.Element {
+type AppProps = {
+  offers: Offer[];
+}
+
+function App({ offers }: AppProps): JSX.Element {
   const offersCount = 5;
   const authorizationStatus = getAuthorizationStatus();
   return (
@@ -20,14 +25,14 @@ function App(): JSX.Element {
         <ScrollToTop />
         <Routes>
           <Route path={AppRoute.Root} element={<Layout />}>
-            <Route index element={<MainScreen offersCount={offersCount} />} />
+            <Route index element={<MainPage offersCount={offersCount} />} />
             <Route path={AppRoute.Favorites} element={
               <PrivateRoute authorizationStatus={authorizationStatus}>
                 <FavoritesPage />
               </PrivateRoute>
             }
             />
-            <Route path={AppRoute.Offer} element={<OfferPage />}/>
+            <Route path={AppRoute.Offer} element={<OfferPage offers={offers}/>}/>
             <Route path={AppRoute.Login} element={(
               <PrivateRoute authorizationStatus={authorizationStatus} isReverse>
                 <LoginPage />
