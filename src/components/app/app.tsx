@@ -27,7 +27,7 @@ function App({ offers }: AppProps): JSX.Element {
             <Route index element={<MainPage offers={offers} />} />
             <Route path={AppRoute.Favorites} element={
               <PrivateRoute authorizationStatus={authorizationStatus}>
-                <FavoritesPage />
+                <FavoritesPage offers={offers} />
               </PrivateRoute>
             }
             />

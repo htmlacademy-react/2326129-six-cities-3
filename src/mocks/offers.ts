@@ -17,6 +17,7 @@ const offers: Offer[] = [
     title: 'Beautiful & luxurious studio at great location',
     description: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.',
     isPremium: true,
+    isFavorite: true,
     rating: 4.8,
     price: 120,
     bedrooms: 3,
@@ -45,6 +46,7 @@ const offers: Offer[] = [
     title: 'Charming & cozy apartment in the heart of the city',
     description: 'Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo',
     isPremium: false,
+    isFavorite: false,
     rating: 2.8,
     price: 30,
     bedrooms: 1,
@@ -73,6 +75,7 @@ const offers: Offer[] = [
     title: 'Spacious & modern loft with breathtaking views',
     description: 'But I must explain to you how all this mistaken idea of denouncing pleasure and praising pain was born and I will give you a complete account of the system, and expound the actual teachings of the great explorer of the truth, the master-builder of human happiness',
     isPremium: true,
+    isFavorite: true,
     rating: 5,
     price: 322,
     bedrooms: 5,
@@ -101,6 +104,7 @@ const offers: Offer[] = [
     title: 'Elegant & bright flat just steps from the sea',
     description: 'At vero eos et accusamus et iusto odio dignissimos ducimus qui blanditiis praesentium voluptatum deleniti atque corrupti quos dolores et quas molestias excepturi sint occaecati cupiditate non provident, similique sunt in culpa qui officia deserunt mollitia animi, id est laborum et dolorum fuga',
     isPremium: false,
+    isFavorite: true,
     rating: 3.1,
     price: 199,
     bedrooms: 2,
@@ -122,6 +126,35 @@ const offers: Offer[] = [
     ],
     type: 'hotel',
     features: ['Wi-Fi', 'Washing machine', 'Towels', 'Kitchen', 'Dishwasher', 'Cabel TV', 'Fridge']
+  },
+  {
+    id: '5',
+    images: galleryImages.slice(3),
+    title: 'Bellissimo & lalala',
+    description: 'praesentium voluptatum deleniti atque corrupti quos dolores et quas molestias excepturi sint occaecati cupiditate non provident, similique sunt in culpa qui officia deserunt mollitia animi, id est laborum et dolorum fuga',
+    isPremium: true,
+    isFavorite: true,
+    rating: 5,
+    price: 333,
+    bedrooms: 4,
+    amountAdults: 6,
+    city: 'Paris',
+    host: {
+      avatar: 'img/avatar-angelina.jpg',
+      name: 'Louis',
+      isPro: true
+    },
+    reviews: [
+      {
+        avatar: 'img/avatar-max.jpg',
+        username: 'Pedro',
+        rating: 5,
+        date: 'May 2001',
+        text: 'nihil molestiae consequatur, vel illum qui dolorem eum fugiat quo voluptas nulla pariatur'
+      }
+    ],
+    type: 'hotel',
+    features: ['Wi-Fi', 'Washing machine']
   }
 ];
 

@@ -25,6 +25,7 @@ export type Offer = {
   id: string;
   images: Image[];
   title: string;
+  isFavorite: boolean;
   description: string;
   isPremium: boolean;
   type: ApartmentType;

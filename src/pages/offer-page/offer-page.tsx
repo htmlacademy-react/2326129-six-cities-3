@@ -29,11 +29,10 @@ function OfferPage({ offers }: OfferPageProps) {
     return <PageNotFound type='offer' />;
   }
 
-  const { images, isPremium, title, rating, type, bedrooms, amountAdults, reviews = [], host, description } = currentOffer;
+  const { images, isPremium, title, rating, type, bedrooms, amountAdults, reviews = [], host, description, isFavorite } = currentOffer;
 
   const bedroomsAmount = `${bedrooms} ${bedrooms === 1 ? 'Bedroom' : 'Bedrooms'}`;
   const adultsAmount = `Max ${amountAdults} ${amountAdults === 1 ? 'adult' : 'adults'}`;
-
 
   return (
     <div className="page">
@@ -56,7 +55,7 @@ function OfferPage({ offers }: OfferPageProps) {
                 <h1 className="offer__name">
                   {title}
                 </h1>
-                <button className="offer__bookmark-button button" type="button">
+                <button className={`offer__bookmark-button ${isFavorite && 'offer__bookmark-button--active'} button`} type="button">
                   <svg className="offer__bookmark-icon" width="31" height="33">
                     <use xlinkHref="#icon-bookmark"></use>
                   </svg>
