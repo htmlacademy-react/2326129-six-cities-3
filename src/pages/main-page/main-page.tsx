@@ -1,25 +1,15 @@
 import { Helmet } from 'react-helmet-async';
-import { CityCard } from '../../components/city-card/city-card';
 import { LocationItems } from './components/location-items/location-items';
-import { SortingForm } from './components/sorting-form/sorting-form';
+import { Offer } from '../offer-page/types/types';
+import { OffersSection } from '../offer-page/components/offers-section/offers-section';
 
 const cities = ['Paris', 'Cologne', 'Brussels', 'Amsterdam', 'Hamburg', 'Dusseldorf'];
 
 type MainPageProps = {
-  offersCount: number;
+  offers: Offer[];
 }
 
-function CityCardsList(): JSX.Element {
-  return (
-    <div className="cities__places-list places__list tabs__content">
-      {Array.from({ length: 5 }, (_, index) => (
-        <CityCard key={index} />
-      ))}
-    </div>
-  );
-}
-
-function MainPage({ offersCount }: MainPageProps): JSX.Element {
+function MainPage({ offers }: MainPageProps): JSX.Element {
   return (
     <div className="page page--gray page--main">
       <Helmet>
@@ -34,12 +24,7 @@ function MainPage({ offersCount }: MainPageProps): JSX.Element {
         </div>
         <div className="cities">
           <div className="cities__places-container container">
-            <section className="cities__places places">
-              <h2 className="visually-hidden">Places</h2>
-              <b className="places__found">{offersCount} places to stay in Amsterdam</b>
-              < SortingForm />
-              < CityCardsList />
-            </section>
+            <OffersSection offers={offers} />
             <div className="cities__right-section">
               <section className="cities__map map" />
             </div>

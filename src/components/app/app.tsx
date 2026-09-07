@@ -17,7 +17,6 @@ type AppProps = {
 }
 
 function App({ offers }: AppProps): JSX.Element {
-  const offersCount = 5;
   const authorizationStatus = getAuthorizationStatus();
   return (
     <HelmetProvider>
@@ -25,7 +24,7 @@ function App({ offers }: AppProps): JSX.Element {
         <ScrollToTop />
         <Routes>
           <Route path={AppRoute.Root} element={<Layout />}>
-            <Route index element={<MainPage offersCount={offersCount} />} />
+            <Route index element={<MainPage offers={offers} />} />
             <Route path={AppRoute.Favorites} element={
               <PrivateRoute authorizationStatus={authorizationStatus}>
                 <FavoritesPage />
@@ -40,7 +39,7 @@ function App({ offers }: AppProps): JSX.Element {
             )}
             />
           </Route>
-          <Route path="*" element={<PageNotFound />} />
+          <Route path="*" element={<PageNotFound type='page' />} />
         </Routes>
       </BrowserRouter>
     </HelmetProvider>
