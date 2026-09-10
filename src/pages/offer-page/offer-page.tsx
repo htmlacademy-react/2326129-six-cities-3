@@ -7,7 +7,7 @@ import { AuthorizationStatus } from '../../const';
 import { ApartmentType } from './types/types';
 import { PageNotFound } from '../page-not-found/page-not-found';
 import { ReviewForm } from './components/review-form/review-form';
-import { getFullOffer } from '../../mocks/get-full-offer';
+import { getFullOffer } from '../../mocks';
 
 // type OfferPageProps = {
 //   offers: Offer[];

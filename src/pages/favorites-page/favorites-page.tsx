@@ -7,11 +7,10 @@ type FavoritesPageProps = {
 };
 
 function FavoritesPage({ offers }: FavoritesPageProps): JSX.Element {
-  const favoriteOffers = offers.filter((offer) => offer.isFavorite);
 
   const groupedByCity: Record<string, OfferPreview[]> = {};
 
-  favoriteOffers.forEach((offer) => {
+  offers.forEach((offer) => {
     const cityName = offer.city.name;
     if (!groupedByCity[cityName]) {
       groupedByCity[cityName] = [];

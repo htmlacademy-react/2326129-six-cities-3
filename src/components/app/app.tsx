@@ -11,7 +11,7 @@ import { AppRoute} from '../../const';
 import { HelmetProvider } from 'react-helmet-async';
 import { getAuthorizationStatus } from '../../authorization-status';
 import { OfferPreview } from '../../pages/offer-page/types/types';
-import { favorites } from '../../mocks/favorites';
+import { favorites } from '../../mocks';
 
 type AppProps = {
   offers: OfferPreview[];
