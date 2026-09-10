@@ -1,12 +1,12 @@
 import { Helmet } from 'react-helmet-async';
 import { LocationItems } from './components/location-items/location-items';
-import { Offer } from '../offer-page/types/types';
+import { OfferPreview } from '../offer-page/types/types';
 import { OffersSection } from '../offer-page/components/offers-section/offers-section';
 
 const cities = ['Paris', 'Cologne', 'Brussels', 'Amsterdam', 'Hamburg', 'Dusseldorf'];
 
 type MainPageProps = {
-  offers: Offer[];
+  offers: OfferPreview[];
 }
 
 function MainPage({ offers }: MainPageProps): JSX.Element {

@@ -1,40 +1,75 @@
-import { City } from '../../main-page/types/types';
+import { CityName } from '../../main-page/types/types';
 
 export type ApartmentType = 'apartment' | 'house' | 'room' | 'hotel';
 
-type ImageExpression = 'jpg' | 'png' | 'jpeg'
-
-export type Image = `${string}.${ImageExpression}`;
-
-
 type Host = {
-  avatar: string;
   name: string;
+  avatarUrl: string;
   isPro: boolean;
-}
+};
 
-type Review = {
-  avatar: string;
-  username: string;
-  rating: number;
+export type Review = {
+  id: string;
   date: string;
-  text: string;
-}
+  user: {
+    name: string;
+    avatarUrl: string;
+    isPro: boolean;
+  };
+  comment: string;
+  rating: number;
+};
+
+export type OfferPreview = {
+  id: string;
+  title: string;
+  type: ApartmentType;
+  price: number;
+  city: {
+    name: CityName;
+    location: {
+      latitude: number;
+      longitude: number;
+      zoom: number;
+    };
+  };
+  location: {
+    latitude: number;
+    longitude: number;
+    zoom: number;
+  };
+  isFavorite: boolean;
+  isPremium: boolean;
+  rating: number;
+  previewImage: string;
+};
 
 export type Offer = {
   id: string;
-  images: Image[];
   title: string;
-  isFavorite: boolean;
-  description: string;
-  isPremium: boolean;
   type: ApartmentType;
-  rating: number;
   price: number;
+  city: {
+    name: CityName;
+    location: {
+      latitude: number;
+      longitude: number;
+      zoom: number;
+    };
+  };
+  location: {
+    latitude: number;
+    longitude: number;
+    zoom: number;
+  };
+  isFavorite: boolean;
+  isPremium: boolean;
+  rating: number;
+  description: string;
   bedrooms: number;
-  amountAdults: number;
-  city: City;
-  features: string[];
+  goods: string[];
   host: Host;
+  images: string[];
+  maxAdults: number;
   reviews: Review[];
-}
+};

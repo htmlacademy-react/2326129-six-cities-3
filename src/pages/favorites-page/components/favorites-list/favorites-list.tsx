@@ -1,13 +1,13 @@
 import { Link } from 'react-router-dom';
-import { Offer } from '../../../offer-page/types/types';
-import { FavoriteCard } from '../favorite-card/favorite-card';
+import { OfferPreview } from '../../../offer-page/types/types';
+import { PlaceCard } from '../../../../components/place-card/place-card';
 
 type FavoritesLocationListProps = {
   city: string;
-  offers: Offer[];
+  offers: OfferPreview[];
 };
 
-function FavoritesLocationList({ city, offers }: FavoritesLocationListProps) {
+function FavoritesList({ city, offers }: FavoritesLocationListProps) {
   return (
     <li className="favorites__locations-items">
       <div className="favorites__locations locations locations--current">
@@ -18,12 +18,12 @@ function FavoritesLocationList({ city, offers }: FavoritesLocationListProps) {
         </div>
       </div>
       <div className="favorites__places">
-        {offers.map((offer) => (
-          <FavoriteCard key={offer.id} offer={offer} />
+        {offers && offers.length > 0 && offers.map((offer) => (
+          <PlaceCard key={offer.id} offer={offer} variant='favorites'/>
         ))}
       </div>
     </li>
   );
 }
 
-export { FavoritesLocationList };
+export { FavoritesList };

@@ -5,13 +5,13 @@ import { useParams } from 'react-router-dom';
 import { getAuthorizationStatus } from '../../authorization-status';
 import { AuthorizationStatus } from '../../const';
 import { ApartmentType } from './types/types';
-import { Offer } from './types/types';
 import { PageNotFound } from '../page-not-found/page-not-found';
 import { ReviewForm } from './components/review-form/review-form';
+import { getFullOffer } from '../../mocks/get-full-offer';
 
-type OfferPageProps = {
-  offers: Offer[];
-}
+// type OfferPageProps = {
+//   offers: Offer[];
+// }
 
 function capitalizeFirstLetterType(str: ApartmentType): string {
   if (!str) {
@@ -20,19 +20,32 @@ function capitalizeFirstLetterType(str: ApartmentType): string {
   return str.charAt(0).toUpperCase() + str.slice(1);
 }
 
-function OfferPage({ offers }: OfferPageProps) {
+function OfferPage() {
   const { id } = useParams();
   const authorizationStatus = getAuthorizationStatus();
-  const currentOffer: Offer | undefined = offers.find((offer) => offer.id === id);
+  const currentOffer = id ? getFullOffer(id) : undefined;
 
   if(!currentOffer) {
     return <PageNotFound type='offer' />;
   }
 
-  const { images, isPremium, title, rating, type, bedrooms, amountAdults, reviews = [], host, description, isFavorite } = currentOffer;
+  const {
+    images,
+    isPremium,
+    title,
+    rating,
+    type,
+    bedrooms,
+    maxAdults,
+    host,
+    description,
+    price,
+    isFavorite,
+    reviews = []
+  } = currentOffer;
 
   const bedroomsAmount = `${bedrooms} ${bedrooms === 1 ? 'Bedroom' : 'Bedrooms'}`;
-  const adultsAmount = `Max ${amountAdults} ${amountAdults === 1 ? 'adult' : 'adults'}`;
+  const adultsAmount = `Max ${maxAdults} ${maxAdults === 1 ? 'adult' : 'adults'}`;
 
   return (
     <div className="page">
@@ -81,7 +94,7 @@ function OfferPage({ offers }: OfferPageProps) {
                 </li>
               </ul>
               <div className="offer__price">
-                <b className="offer__price-value">&euro;{currentOffer.price}</b>
+                <b className="offer__price-value">&euro;{price}</b>
                 <span className="offer__price-text">&nbsp;night</span>
               </div>
               <div className="offer__inside">
@@ -92,7 +105,7 @@ function OfferPage({ offers }: OfferPageProps) {
                 <h2 className="offer__host-title">Meet the host</h2>
                 <div className="offer__host-user user">
                   <div className="offer__avatar-wrapper offer__avatar-wrapper--pro user__avatar-wrapper">
-                    <img className="offer__avatar user__avatar" src={host.avatar} width="74" height="74" alt="Host avatar" />
+                    <img className="offer__avatar user__avatar" src={host.avatarUrl} width="74" height="74" alt="Host avatar" />
                   </div>
                   <span className="offer__user-name">
                     {host.name}
@@ -108,16 +121,16 @@ function OfferPage({ offers }: OfferPageProps) {
                 </div>
               </div>
               <section className="offer__reviews reviews">
-                <h2 className="reviews__title">Reviews &middot; <span className="reviews__amount">1</span></h2>
+                <h2 className="reviews__title">Reviews &middot; <span className="reviews__amount">{reviews.length}</span></h2>
                 <ul className="reviews__list">
-                  {reviews.map((review) => (
-                    <li key={review.username + review.date} className="reviews__item">
+                  {reviews && reviews.length > 0 && reviews.map((review) => (
+                    <li key={review.user.name + review.date} className="reviews__item">
                       <div className="reviews__user user">
                         <div className="reviews__avatar-wrapper user__avatar-wrapper">
-                          <img className="reviews__avatar user__avatar" src={review.avatar} width="54" height="54" alt="Reviews avatar" />
+                          <img className="reviews__avatar user__avatar" src={review.user.avatarUrl} width="54" height="54" alt="Reviews avatar" />
                         </div>
                         <span className="reviews__user-name">
-                          {review.username}
+                          {review.user.name}
                         </span>
                       </div>
                       <div className="reviews__info">
@@ -128,9 +141,11 @@ function OfferPage({ offers }: OfferPageProps) {
                           </div>
                         </div>
                         <p className="reviews__text">
-                          {review.text}
+                          {review.comment}
                         </p>
-                        <time className="reviews__time" dateTime="2019-04-24">April 2019</time>
+                        <time className="reviews__time" dateTime={review.date}>
+                          {new Date(review.date).toLocaleString('en-US', { month: 'long', year: 'numeric' })}
+                        </time>
                       </div>
                     </li>
                   ))}
@@ -149,7 +164,7 @@ function OfferPage({ offers }: OfferPageProps) {
             <div className="near-places__list places__list">
               <article className="near-places__card place-card">
                 <div className="near-places__image-wrapper place-card__image-wrapper">
-                  <a href="#">
+                  <a>
                     <img className="place-card__image" src="img/room.jpg" width="260" height="200" alt="Place image" />
                   </a>
                 </div>
@@ -173,7 +188,7 @@ function OfferPage({ offers }: OfferPageProps) {
                     </div>
                   </div>
                   <h2 className="place-card__name">
-                    <a href="#">Wood and stone place</a>
+                    <a>Wood and stone place</a>
                   </h2>
                   <p className="place-card__type">Room</p>
                 </div>
@@ -181,7 +196,7 @@ function OfferPage({ offers }: OfferPageProps) {
 
               <article className="near-places__card place-card">
                 <div className="near-places__image-wrapper place-card__image-wrapper">
-                  <a href="#">
+                  <a>
                     <img className="place-card__image" src="img/apartment-02.jpg" width="260" height="200" alt="Place image" />
                   </a>
                 </div>
@@ -205,7 +220,7 @@ function OfferPage({ offers }: OfferPageProps) {
                     </div>
                   </div>
                   <h2 className="place-card__name">
-                    <a href="#">Canal View Prinsengracht</a>
+                    <a>Canal View Prinsengracht</a>
                   </h2>
                   <p className="place-card__type">Apartment</p>
                 </div>
@@ -216,7 +231,7 @@ function OfferPage({ offers }: OfferPageProps) {
                   <span>Premium</span>
                 </div>
                 <div className="near-places__image-wrapper place-card__image-wrapper">
-                  <a href="#">
+                  <a>
                     <img className="place-card__image" src="img/apartment-03.jpg" width="260" height="200" alt="Place image" />
                   </a>
                 </div>
@@ -240,7 +255,7 @@ function OfferPage({ offers }: OfferPageProps) {
                     </div>
                   </div>
                   <h2 className="place-card__name">
-                    <a href="#">Nice, cozy, warm big bed apartment</a>
+                    <a>Nice, cozy, warm big bed apartment</a>
                   </h2>
                   <p className="place-card__type">Apartment</p>
                 </div>

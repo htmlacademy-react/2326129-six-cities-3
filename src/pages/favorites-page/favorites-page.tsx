@@ -1,22 +1,23 @@
 import { Helmet } from 'react-helmet-async';
-import { Offer } from '../offer-page/types/types';
-import { FavoritesLocationList } from './components/favorites-list/favorites-list';
+import { OfferPreview } from '../offer-page/types/types';
+import { FavoritesList } from './components/favorites-list/favorites-list';
 
 type FavoritesPageProps = {
-  offers: Offer[];
+  offers: OfferPreview[];
 };
 
 function FavoritesPage({ offers }: FavoritesPageProps): JSX.Element {
   const favoriteOffers = offers.filter((offer) => offer.isFavorite);
 
-  const groupedByCity = favoriteOffers.reduce<Record<string, Offer[]>>((acc, offer) => {
-    const city = offer.city;
-    if (!acc[city]) {
-      acc[city] = [];
+  const groupedByCity: Record<string, OfferPreview[]> = {};
+
+  favoriteOffers.forEach((offer) => {
+    const cityName = offer.city.name;
+    if (!groupedByCity[cityName]) {
+      groupedByCity[cityName] = [];
     }
-    acc[city].push(offer);
-    return acc;
-  }, {});
+    groupedByCity[cityName].push(offer);
+  });
 
   const cityGroups = Object.entries(groupedByCity);
 
@@ -29,14 +30,14 @@ function FavoritesPage({ offers }: FavoritesPageProps): JSX.Element {
         <div className="page__favorites-container container">
           <section className="favorites">
             <h1 className="favorites__title">Saved listing</h1>
-            {cityGroups.length === 0 ? (
+            {!cityGroups || cityGroups.length === 0 ? (
               <div className="favorites__status-wrapper">
                 <p className="favorites__status">Nothing yet saved.</p>
               </div>
             ) : (
               <ul className="favorites__list">
-                {cityGroups.map(([city, cityOffers]) => (
-                  <FavoritesLocationList key={city} city={city} offers={cityOffers} />
+                {cityGroups && cityGroups.length > 0 && cityGroups.map(([city, cityOffers]) => (
+                  <FavoritesList key={city} city={city} offers={cityOffers} />
                 ))}
               </ul>
             )}

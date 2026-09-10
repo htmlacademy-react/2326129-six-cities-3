@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 
 const phrases = {
   page: {text: 'Page Not Found', o: '⚠️'},
-  offer: {text: 'We don\'t have any offers with that ID', o: '🤔'}
+  offer: {text: 'Offer not found', o: '🤔'}
 };
 
 type PageNotFoundProps = {
@@ -22,6 +22,8 @@ function PageNotFound({type}: PageNotFoundProps): JSX.Element {
         <br />
         {phrases[type].text}
         {phrases[type].o}
+        <br />
+        =(
       </h1>
       <Link style={{ color: 'blue' }} to='/' title='/'>Go to main page</Link>
     </div>

@@ -10,10 +10,11 @@ import PrivateRoute from '../private-route/private-route';
 import { AppRoute} from '../../const';
 import { HelmetProvider } from 'react-helmet-async';
 import { getAuthorizationStatus } from '../../authorization-status';
-import { Offer } from '../../pages/offer-page/types/types';
+import { OfferPreview } from '../../pages/offer-page/types/types';
+import { favorites } from '../../mocks/favorites';
 
 type AppProps = {
-  offers: Offer[];
+  offers: OfferPreview[];
 }
 
 function App({ offers }: AppProps): JSX.Element {
@@ -27,11 +28,11 @@ function App({ offers }: AppProps): JSX.Element {
             <Route index element={<MainPage offers={offers} />} />
             <Route path={AppRoute.Favorites} element={
               <PrivateRoute authorizationStatus={authorizationStatus}>
-                <FavoritesPage offers={offers} />
+                <FavoritesPage offers={favorites} />
               </PrivateRoute>
             }
             />
-            <Route path={AppRoute.Offer} element={<OfferPage offers={offers}/>}/>
+            <Route path={AppRoute.Offer} element={<OfferPage />}/>
             <Route path={AppRoute.Login} element={(
               <PrivateRoute authorizationStatus={authorizationStatus} isReverse>
                 <LoginPage />
