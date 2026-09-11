@@ -3,7 +3,7 @@ const offerItems = [ 'Wi-Fi', 'Washing machine', 'Towels', 'Heating', 'Coffee ma
 function OfferItems(): JSX.Element {
   return (
     <ul className="offer__inside-list">
-      {offerItems.map((item) => (
+      {offerItems && offerItems.length > 0 && offerItems.map((item) => (
         <li key={item} className="offer__inside-item">
           {item}
         </li>

@@ -12,7 +12,7 @@ function SortingItems({activeSort}: SortingProps): JSX.Element {
   ];
   return (
     <ul className="places__options places__options--custom places__options--opened">
-      {sortingOptions.map((option) => (
+      {sortingOptions && sortingOptions.length > 0 && sortingOptions.map((option) => (
         <li
           className={`places__option${activeSort === option.value ? ' places__option--active' : ''}`}
           tabIndex={0}

@@ -1,7 +1,16 @@
 import { Helmet } from 'react-helmet-async';
 import { Link } from 'react-router-dom';
 
-function PageNotFound() {
+const phrases = {
+  page: {text: 'Page Not Found', o: '⚠️'},
+  offer: {text: 'Offer not found', o: '🤔'}
+};
+
+type PageNotFoundProps = {
+  type: keyof typeof phrases;
+}
+
+function PageNotFound({type}: PageNotFoundProps): JSX.Element {
   return (
 
     <div style={{ paddingTop: '20px', paddingLeft: '100px' }}>
@@ -11,7 +20,8 @@ function PageNotFound() {
       <h1>
         404
         <br />
-        Page not found
+        {phrases[type].text}
+        {phrases[type].o}
         <br />
         =(
       </h1>
