@@ -1,22 +1,13 @@
 import { SortingForm } from '../../../main-page/components/sorting-form/sorting-form';
-import { useEffect, useState } from 'react';
-import { Nullable } from 'vitest';
 import { OfferPreview } from '../../types/types';
 import { PlaceCard } from '../../../../components/place-card/place-card';
 
 type OffersSectionProps = {
   offers: OfferPreview[];
+  onCardHover: (offer?: OfferPreview) => void;
 }
 
-function OffersSection({ offers }: OffersSectionProps): JSX.Element {
-  const [activeOffer, setActiveOffer] = useState<Nullable<OfferPreview>>(null);
-  const handleCardHover = (offer?: OfferPreview) => {
-    setActiveOffer(offer || null);
-  };
-  useEffect(() => {
-    // eslint-disable-next-line no-console
-    console.log('call useEffect');
-  }, [activeOffer]);
+function OffersSection({ offers, onCardHover }: OffersSectionProps): JSX.Element {
 
   return (
     <section className="cities__places places">
@@ -29,8 +20,8 @@ function OffersSection({ offers }: OffersSectionProps): JSX.Element {
             key={offer.id}
             offer={offer}
             variant='cities'
-            onMouseEnter={() => handleCardHover(offer)}
-            onMouseLeave={() => handleCardHover()}
+            onMouseEnter={() => onCardHover(offer)}
+            onMouseLeave={() => onCardHover()}
           />
         ))}
       </div>

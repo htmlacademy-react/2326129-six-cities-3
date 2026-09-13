@@ -1,6 +1,7 @@
 // src/components/place-card/place-card.tsx
 import { Link } from 'react-router-dom';
 import { OfferPreview } from '../../pages/offer-page/types/types';
+import { AppRoute } from '../../const';
 
 type PlaceCardVariant = 'cities' | 'favorites';
 
@@ -50,7 +51,7 @@ function PlaceCard({
       )}
 
       <div className={imageWrapperClass}>
-        <Link to={`/offer/${id}`}>
+        <Link to={AppRoute.Offer.replace(':id', id)}>
           <img
             className="place-card__image"
             src={previewImage}
@@ -90,7 +91,7 @@ function PlaceCard({
         </div>
 
         <h2 className="place-card__name">
-          <Link to={`/offer/${id}`}>{title}</Link>
+          <Link to={AppRoute.Offer.replace(':id', id)}>{title}</Link>
         </h2>
 
         <p className="place-card__type">
