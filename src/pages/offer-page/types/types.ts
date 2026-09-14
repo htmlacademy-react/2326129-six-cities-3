@@ -1,4 +1,4 @@
-import { CityName } from '../../main-page/types/types';
+import { CityName } from '../../main-page/const/const';
 
 export type ApartmentType = 'apartment' | 'house' | 'room' | 'hotel';
 

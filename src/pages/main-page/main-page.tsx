@@ -4,9 +4,8 @@ import { OfferPreview } from '../offer-page/types/types';
 import { OffersSection } from '../offer-page/components/offers-section/offers-section';
 import { Map } from '../../components/map/map';
 import { useState } from 'react';
-import { CityName } from './types/types';
+import { CityName, CITIES } from './const/const';
 
-const CITIES: CityName[] = ['Paris', 'Cologne', 'Brussels', 'Amsterdam', 'Hamburg', 'Dusseldorf'];
 
 type MainPageProps = {
   offers: OfferPreview[];

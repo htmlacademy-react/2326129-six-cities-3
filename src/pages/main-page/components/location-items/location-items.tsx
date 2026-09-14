@@ -1,9 +1,9 @@
 import { Link } from 'react-router-dom';
 import { AppRoute } from '../../../../const';
-import { CityName } from '../../types/types';
+import { CityName } from '../../const/const';
 
 type Locations = {
-  cities: CityName[];
+  cities: readonly CityName[];
   activeCity: CityName;
   onCityChange: (city: CityName) => void;
 };
