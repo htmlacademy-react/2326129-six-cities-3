@@ -6,38 +6,46 @@ import { City, OfferPreview } from '../../pages/offer-page/types/types';
 import { DEFAULT_MARKER_ICON, ACTIVE_MARKER_ICON } from './const';
 
 type MapProps = {
+  className?: string;
   city: City;
   offers: OfferPreview[];
   activeOfferId?: string | null;
 }
 
-export const Map = ({city, offers, activeOfferId}: MapProps): JSX.Element => {
+export const Map = ({ className, city, offers, activeOfferId}: MapProps): JSX.Element => {
   const mapContainerRef = useRef<HTMLDivElement>(null);
   const map = useMap({location: city.location, containerRef: mapContainerRef});
   const markerLayer = useRef<LayerGroup>(leaflet.layerGroup());
 
   useEffect(() => {
     if (map) {
-      map.setView([city.location.latitude, city.location.longitude,], city.location.zoom);
       markerLayer.current.addTo(map);
-      markerLayer.current.clearLayers();
     }
-  }, [city, map]);
+  }, [map]);
 
-  useEffect(() : void => {
+  useEffect(() => {
     if (map) {
-      offers.forEach((offer) : void => {
-        leaflet
-          .marker({
-            lat: offer.location.latitude,
-            lng: offer.location.longitude
-          }, {
-            icon: offer.id === activeOfferId ? ACTIVE_MARKER_ICON : DEFAULT_MARKER_ICON,
-          })
-          .addTo(markerLayer.current);
-      });
+      map.setView(
+        [city.location.latitude, city.location.longitude],
+        city.location.zoom
+      );
     }
-  }, [activeOfferId, map, offers]);
+  }, [map, city.location.latitude, city.location.longitude, city.location.zoom]);
 
-  return <section style={{height: '500px'}} className="cities__map map" ref={mapContainerRef} />;
+  useEffect(() => {
+    if (!map) {
+      return;
+    }
+    markerLayer.current.clearLayers();
+    offers.forEach((offer) => {
+      leaflet
+        .marker(
+          { lat: offer.location.latitude, lng: offer.location.longitude },
+          { icon: offer.id === activeOfferId ? ACTIVE_MARKER_ICON : DEFAULT_MARKER_ICON }
+        )
+        .addTo(markerLayer.current);
+    });
+  }, [map, offers, activeOfferId]);
+
+  return <section className={`map ${className}`} ref={mapContainerRef} />;
 };

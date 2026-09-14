@@ -40,7 +40,7 @@ function MainPage({ offers }: MainPageProps): JSX.Element {
           <div className="cities__places-container container">
             <OffersSection offers={cityOffers} onCardHover={(offer) => setActiveOfferId(offer ? offer.id : null)} />
             <div className="cities__right-section">
-              <Map city={currentCity} offers={cityOffers} activeOfferId={activeOfferId}/>
+              <Map className='cities__map' city={currentCity} offers={cityOffers} activeOfferId={activeOfferId}/>
             </div>
           </div>
         </div>
