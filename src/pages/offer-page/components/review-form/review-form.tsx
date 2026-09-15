@@ -5,6 +5,7 @@ type ChangeHandler = ReactEventHandler<HTMLInputElement | HTMLTextAreaElement>
 
 function ReviewForm(): JSX.Element {
   const [review, setReview] = useState({rating: 0, review: ''});
+  const textLength = 50;
 
   const handleChange: ChangeHandler = (event) => {
     const {name, value} = event.currentTarget;
@@ -36,17 +37,19 @@ function ReviewForm(): JSX.Element {
         className="reviews__textarea form__textarea"
         id="review"
         name="review"
+        value={review.review}
+        maxLength={300}
         placeholder="Tell how was your stay, what you like and what can be improved"
         onChange={handleChange}
       />
       <div className="reviews__button-wrapper">
         <p className="reviews__help">
-          To submit review please make sure to set <span className="reviews__star">rating</span> and describe your stay with at least <b className="reviews__text-amount">50 characters</b>.
+          To submit review please make sure to set <span className="reviews__star">rating</span> and describe your stay with at least <b className="reviews__text-amount">{textLength} characters</b>.
         </p>
         <button
           className="reviews__submit form__submit button"
           type="submit"
-          disabled={review.review.length < 50 || review.rating === 0}
+          disabled={review.review.length < textLength || review.rating === 0}
         >
           Submit
         </button>

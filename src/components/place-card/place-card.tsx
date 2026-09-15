@@ -1,8 +1,9 @@
 // src/components/place-card/place-card.tsx
 import { Link } from 'react-router-dom';
 import { OfferPreview } from '../../pages/offer-page/types/types';
+import { AppRoute } from '../../const';
 
-type PlaceCardVariant = 'cities' | 'favorites';
+type PlaceCardVariant = 'cities' | 'favorites' | 'nearby';
 
 type PlaceCardProps = {
   offer: OfferPreview;
@@ -21,21 +22,24 @@ function PlaceCard({
   const starRating = (rating / 5) * 100;
   const placeType = type.charAt(0).toUpperCase() + type.slice(1);
 
-  const isCities = variant === 'cities';
-  const imageWidth = isCities ? 260 : 150;
-  const imageHeight = isCities ? 200 : 110;
+  const isFavorites = variant === 'favorites';
+  const isNearby = variant === 'nearby';
 
-  const articleClass = isCities
-    ? 'cities__card place-card'
-    : 'favorites__card place-card';
+  const imageWidth = isFavorites ? 150 : 260;
+  const imageHeight = isFavorites ? 110 : 200;
 
-  const imageWrapperClass = isCities
-    ? 'cities__image-wrapper place-card__image-wrapper'
-    : 'favorites__image-wrapper place-card__image-wrapper';
+  let articleClass = 'cities__card place-card';
+  let imageWrapperClass = 'cities__image-wrapper place-card__image-wrapper';
+  let infoClass = 'place-card__info';
 
-  const infoClass = isCities
-    ? 'place-card__info'
-    : 'favorites__card-info place-card__info';
+  if (isFavorites) {
+    articleClass = 'favorites__card place-card';
+    imageWrapperClass = 'favorites__image-wrapper place-card__image-wrapper';
+    infoClass = 'favorites__card-info place-card__info';
+  } else if (isNearby) {
+    articleClass = 'near-places__card place-card';
+    imageWrapperClass = 'near-places__image-wrapper place-card__image-wrapper';
+  }
 
   return (
     <article
@@ -50,7 +54,7 @@ function PlaceCard({
       )}
 
       <div className={imageWrapperClass}>
-        <Link to={`/offer/${id}`}>
+        <Link to={AppRoute.Offer.replace(':id', id)}>
           <img
             className="place-card__image"
             src={previewImage}
@@ -90,12 +94,10 @@ function PlaceCard({
         </div>
 
         <h2 className="place-card__name">
-          <Link to={`/offer/${id}`}>{title}</Link>
+          <Link to={AppRoute.Offer.replace(':id', id)}>{title}</Link>
         </h2>
 
-        <p className="place-card__type">
-          {placeType}
-        </p>
+        <p className="place-card__type">{placeType}</p>
       </div>
     </article>
   );

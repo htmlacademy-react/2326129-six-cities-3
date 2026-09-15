@@ -1,4 +1,4 @@
-import { CityName } from '../../main-page/types/types';
+import { CityName } from '../../main-page/const/const';
 
 export type ApartmentType = 'apartment' | 'house' | 'room' | 'hotel';
 
@@ -20,24 +20,24 @@ export type Review = {
   rating: number;
 };
 
+export type Location = {
+  latitude: number;
+  longitude: number;
+  zoom: number;
+}
+
+export type City = {
+  name: CityName;
+  location: Location;
+}
+
 export type OfferPreview = {
   id: string;
   title: string;
   type: ApartmentType;
   price: number;
-  city: {
-    name: CityName;
-    location: {
-      latitude: number;
-      longitude: number;
-      zoom: number;
-    };
-  };
-  location: {
-    latitude: number;
-    longitude: number;
-    zoom: number;
-  };
+  city: City;
+  location: Location;
   isFavorite: boolean;
   isPremium: boolean;
   rating: number;
@@ -49,19 +49,8 @@ export type Offer = {
   title: string;
   type: ApartmentType;
   price: number;
-  city: {
-    name: CityName;
-    location: {
-      latitude: number;
-      longitude: number;
-      zoom: number;
-    };
-  };
-  location: {
-    latitude: number;
-    longitude: number;
-    zoom: number;
-  };
+  city: City;
+  location: Location;
   isFavorite: boolean;
   isPremium: boolean;
   rating: number;

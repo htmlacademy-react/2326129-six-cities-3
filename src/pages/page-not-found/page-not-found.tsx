@@ -1,5 +1,6 @@
 import { Helmet } from 'react-helmet-async';
 import { Link } from 'react-router-dom';
+import { AppRoute } from '../../const';
 
 const phrases = {
   page: {text: 'Page Not Found', o: '⚠️'},
@@ -25,7 +26,7 @@ function PageNotFound({type}: PageNotFoundProps): JSX.Element {
         <br />
         =(
       </h1>
-      <Link style={{ color: 'blue' }} to='/' title='/'>Go to main page</Link>
+      <Link style={{ color: 'blue' }} to={AppRoute.Root}>Go to main page</Link>
     </div>
   );
 }

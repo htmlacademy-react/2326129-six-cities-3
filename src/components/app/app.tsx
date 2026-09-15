@@ -32,15 +32,15 @@ function App({ offers }: AppProps): JSX.Element {
               </PrivateRoute>
             }
             />
-            <Route path={AppRoute.Offer} element={<OfferPage />}/>
+            <Route path={AppRoute.Offer} element={<OfferPage offers={offers}/>}/>
             <Route path={AppRoute.Login} element={(
               <PrivateRoute authorizationStatus={authorizationStatus} isReverse>
                 <LoginPage />
               </PrivateRoute>
             )}
             />
+            <Route path="*" element={<PageNotFound type='page' />} />
           </Route>
-          <Route path="*" element={<PageNotFound type='page' />} />
         </Routes>
       </BrowserRouter>
     </HelmetProvider>
