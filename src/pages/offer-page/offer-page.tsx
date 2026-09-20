@@ -4,7 +4,7 @@ import { OfferItems } from './components/offer-items/offer-items';
 import { useParams } from 'react-router-dom';
 import { getAuthorizationStatus } from '../../authorization-status';
 import { AuthorizationStatus } from '../../const';
-import { ApartmentType, OfferPreview } from './types/types';
+import { ApartmentType } from './types/types';
 import { PageNotFound } from '../page-not-found/page-not-found';
 import { ReviewForm } from './components/review-form/review-form';
 import { getFullOffer } from '../../mocks';
@@ -12,10 +12,7 @@ import { Map } from '../../components/map';
 import { PlaceCard } from '../../components/place-card/place-card';
 import { getNearOffers } from './utils/utils';
 import { ReviewList } from './components/review-list/review-list';
-
-type OfferPageProps = {
-  offers: OfferPreview[];
-}
+import { useAppSelector } from '../../hooks/store';
 
 function capitalizeFirstLetterType(str: ApartmentType): string {
   if (!str) {
@@ -24,7 +21,8 @@ function capitalizeFirstLetterType(str: ApartmentType): string {
   return str.charAt(0).toUpperCase() + str.slice(1);
 }
 
-function OfferPage({ offers }: OfferPageProps): JSX.Element {
+function OfferPage(): JSX.Element {
+  const offers = useAppSelector((state) => state.offers);
   const { id } = useParams();
   const authorizationStatus = getAuthorizationStatus();
   const currentOffer = id ? getFullOffer(id) : undefined;

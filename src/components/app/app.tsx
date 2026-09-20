@@ -6,7 +6,6 @@ import ScrollToTop from '../scroll-to-top/scroll-to-top';
 import PrivateRoute from '../private-route/private-route';
 import { AppRoute } from '../../const';
 import { getAuthorizationStatus } from '../../authorization-status';
-import { OfferPreview } from '../../pages/offer-page/types/types';
 import { favorites } from '../../mocks';
 
 const MainPage = lazy(() => import('../../pages/main-page/main-page')
@@ -24,11 +23,7 @@ const OfferPage = lazy(() => import('../../pages/offer-page/offer-page')
 const PageNotFound = lazy(() => import('../../pages/page-not-found/page-not-found')
   .then((module) => ({ default: module.PageNotFound })));
 
-type AppProps = {
-  offers: OfferPreview[];
-};
-
-function App({ offers }: AppProps): JSX.Element {
+function App(): JSX.Element {
   const authorizationStatus = getAuthorizationStatus();
 
   return (
@@ -47,7 +42,7 @@ function App({ offers }: AppProps): JSX.Element {
                   </PrivateRoute>
                 }
               />
-              <Route path={AppRoute.Offer} element={<OfferPage offers={offers} />} />
+              <Route path={AppRoute.Offer} element={<OfferPage />} />
               <Route
                 path={AppRoute.Login}
                 element={(

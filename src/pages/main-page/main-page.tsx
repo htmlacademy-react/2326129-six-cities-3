@@ -4,15 +4,23 @@ import { OffersSection } from '../offer-page/components/offers-section/offers-se
 import { Map } from '../../components/map/map';
 import { CITIES } from './const/const';
 import { useAppDispatch, useAppSelector } from '../../hooks/store';
-import { setActiveOfferId, setCity } from '../../store/action';
+import { loadOffers, setCity } from '../../store/action';
 import { City } from '../offer-page/types/types';
+import { useEffect, useState } from 'react';
+import { offers as mockOffers } from '../../mocks';
 
 
 function MainPage(): JSX.Element {
   const dispatch = useAppDispatch();
   const offers = useAppSelector((state) => state.offers);
   const selectedCity = useAppSelector((state) => state.city);
-  const activeOfferId = useAppSelector((state) => state.activeOfferId);
+
+  useEffect(() => {
+    dispatch(loadOffers(mockOffers));
+  }, [dispatch]);
+
+  const [activeOfferId, setActiveOfferId] = useState<string | null>(null);
+
 
   const currentOffers = offers.filter((offer) => offer.city.name === selectedCity);
   const currentCity: City = currentOffers && currentOffers.length > 0
@@ -42,7 +50,7 @@ function MainPage(): JSX.Element {
           <div className="cities__places-container container">
             <OffersSection
               offers={currentOffers}
-              onCardHover={(offer) => dispatch(setActiveOfferId(offer ? offer.id : null))}
+              onCardHover={(offer) => setActiveOfferId(offer ? offer.id : null)}
             />
             <div className="cities__right-section">
               <Map className='cities__map' city={currentCity} offers={currentOffers} activeOfferId={activeOfferId}/>
