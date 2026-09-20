@@ -11,7 +11,6 @@ import { getFullOffer } from '../../mocks';
 import { Map } from '../../components/map';
 import { PlaceCard } from '../../components/place-card/place-card';
 import { getNearOffers } from './utils/utils';
-import { useState } from 'react';
 import { ReviewList } from './components/review-list/review-list';
 
 type OfferPageProps = {
@@ -31,7 +30,6 @@ function OfferPage({ offers }: OfferPageProps): JSX.Element {
   const currentOffer = id ? getFullOffer(id) : undefined;
 
   const foundOffer = offers.find((item) => item.id === id);
-  const [activeOfferId, setActiveOfferId] = useState<string | null>(foundOffer?.id ?? null);
 
   if(!foundOffer || !currentOffer) {
     return <PageNotFound type='offer'/>;
@@ -133,7 +131,7 @@ function OfferPage({ offers }: OfferPageProps): JSX.Element {
               </div>
               <section className="offer__reviews reviews">
                 <h2 className="reviews__title">Reviews &middot; <span className="reviews__amount">{reviews.length}</span></h2>
-                <ReviewList reviews={reviews} />
+                {reviews && reviews.length > 0 && <ReviewList reviews={reviews} />}
                 {authorizationStatus === AuthorizationStatus.Auth && (
                   <ReviewForm />
                 )}
@@ -144,7 +142,7 @@ function OfferPage({ offers }: OfferPageProps): JSX.Element {
             className="offer__map"
             offers={offersForMap}
             city={foundOffer.city}
-            activeOfferId={activeOfferId}
+            activeOfferId={currentOffer.id}
           />
         </section>
         <div className="container">
@@ -156,8 +154,6 @@ function OfferPage({ offers }: OfferPageProps): JSX.Element {
                   key={offer.id}
                   offer={offer}
                   variant='nearby'
-                  onMouseEnter={() => setActiveOfferId(offer.id)}
-                  onMouseLeave={() => setActiveOfferId(foundOffer.id)}
                 />
               ))}
             </div>

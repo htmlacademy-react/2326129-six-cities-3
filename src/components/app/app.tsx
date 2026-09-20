@@ -1,50 +1,68 @@
-import { FavoritesPage } from '../../pages/favorites-page/favorites-page';
-import { LoginPage } from '../../pages/login-page/login-page';
-import { MainPage } from '../../pages/main-page/main-page';
+import { lazy, Suspense } from 'react';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
-import { OfferPage } from '../../pages/offer-page/offer-page';
+import { HelmetProvider } from 'react-helmet-async';
 import { Layout } from '../layout/layout';
-import { PageNotFound } from '../../pages/page-not-found/page-not-found';
 import ScrollToTop from '../scroll-to-top/scroll-to-top';
 import PrivateRoute from '../private-route/private-route';
-import { AppRoute} from '../../const';
-import { HelmetProvider } from 'react-helmet-async';
+import { AppRoute } from '../../const';
 import { getAuthorizationStatus } from '../../authorization-status';
 import { OfferPreview } from '../../pages/offer-page/types/types';
 import { favorites } from '../../mocks';
 
+const MainPage = lazy(() => import('../../pages/main-page/main-page')
+  .then((module) => ({ default: module.MainPage })));
+
+const FavoritesPage = lazy(() => import('../../pages/favorites-page/favorites-page')
+  .then((module) => ({ default: module.FavoritesPage })));
+
+const LoginPage = lazy(() => import('../../pages/login-page/login-page')
+  .then((module) => ({ default: module.LoginPage })));
+
+const OfferPage = lazy(() => import('../../pages/offer-page/offer-page')
+  .then((module) => ({ default: module.OfferPage })));
+
+const PageNotFound = lazy(() => import('../../pages/page-not-found/page-not-found')
+  .then((module) => ({ default: module.PageNotFound })));
+
 type AppProps = {
   offers: OfferPreview[];
-}
+};
 
 function App({ offers }: AppProps): JSX.Element {
   const authorizationStatus = getAuthorizationStatus();
+
   return (
     <HelmetProvider>
       <BrowserRouter>
         <ScrollToTop />
-        <Routes>
-          <Route path={AppRoute.Root} element={<Layout />}>
-            <Route index element={<MainPage offers={offers} />} />
-            <Route path={AppRoute.Favorites} element={
-              <PrivateRoute authorizationStatus={authorizationStatus}>
-                <FavoritesPage offers={favorites} />
-              </PrivateRoute>
-            }
-            />
-            <Route path={AppRoute.Offer} element={<OfferPage offers={offers}/>}/>
-            <Route path={AppRoute.Login} element={(
-              <PrivateRoute authorizationStatus={authorizationStatus} isReverse>
-                <LoginPage />
-              </PrivateRoute>
-            )}
-            />
-            <Route path="*" element={<PageNotFound type='page' />} />
-          </Route>
-        </Routes>
+        <Suspense fallback={<div>Loading...</div>}>
+          <Routes>
+            <Route path={AppRoute.Root} element={<Layout />}>
+              <Route index element={<MainPage />} />
+              <Route
+                path={AppRoute.Favorites}
+                element={
+                  <PrivateRoute authorizationStatus={authorizationStatus}>
+                    <FavoritesPage offers={favorites} />
+                  </PrivateRoute>
+                }
+              />
+              <Route path={AppRoute.Offer} element={<OfferPage offers={offers} />} />
+              <Route
+                path={AppRoute.Login}
+                element={(
+                  <PrivateRoute authorizationStatus={authorizationStatus} isReverse>
+                    <LoginPage />
+                  </PrivateRoute>
+                )}
+              />
+              <Route path="*" element={<PageNotFound type="page" />} />
+            </Route>
+          </Routes>
+        </Suspense>
       </BrowserRouter>
     </HelmetProvider>
   );
 }
 
-export default App ;
+export default App;
