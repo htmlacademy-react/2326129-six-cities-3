@@ -8,12 +8,15 @@ import { loadOffers, setCity } from '../../store/action';
 import { City } from '../offer-page/types/types';
 import { useEffect, useState } from 'react';
 import { offers as mockOffers } from '../../mocks';
+import { SortingOption } from '../../const';
 
 
 function MainPage(): JSX.Element {
   const dispatch = useAppDispatch();
   const offers = useAppSelector((state) => state.offers);
   const selectedCity = useAppSelector((state) => state.city);
+
+  const [sortingOption, setSortingOption] = useState<SortingOption>('popular');
 
   useEffect(() => {
     dispatch(loadOffers(mockOffers));
@@ -22,7 +25,22 @@ function MainPage(): JSX.Element {
   const [activeOfferId, setActiveOfferId] = useState<string | null>(null);
 
 
-  const currentOffers = offers.filter((offer) => offer.city.name === selectedCity);
+  const currentOffers = offers
+    .filter((offer) => offer.city.name === selectedCity)
+    .sort((a, b) => {
+      switch(sortingOption) {
+        case 'price-low':
+          return a.price - b.price;
+        case 'price-high':
+          return b.price - a.price;
+        case 'top-rated':
+          return b.rating - a.rating;
+        case 'popular':
+        default:
+          return 0;
+      }
+    });
+
   const currentCity: City = currentOffers && currentOffers.length > 0
     ? currentOffers[0].city
     : {
@@ -49,6 +67,8 @@ function MainPage(): JSX.Element {
         <div className="cities">
           <div className="cities__places-container container">
             <OffersSection
+              sortingOption={sortingOption}
+              onSortChange={setSortingOption}
               offers={currentOffers}
               onCardHover={(offer) => setActiveOfferId(offer ? offer.id : null)}
             />

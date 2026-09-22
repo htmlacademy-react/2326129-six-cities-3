@@ -1,22 +1,21 @@
+import { SortingOption, SORTING_OPTIONS } from '../../../../const';
+
 type SortingProps = {
-  activeSort: 'popular' | 'price-low' | 'price-high' | 'top-rated';
+  activeSort: SortingOption;
+  onSelect: (option: SortingOption) => void;
 }
 
 
-function SortingItems({activeSort}: SortingProps): JSX.Element {
-  const sortingOptions = [
-    {label: 'Popular', value: 'popular'},
-    {label: 'Price: low to high', value: 'price-low'},
-    {label: 'Price: high to low', value: 'price-high'},
-    {label: 'Top rated first', value: 'top-rated'},
-  ];
+function SortingItems({activeSort, onSelect }: SortingProps): JSX.Element {
+
   return (
-    <ul className="places__options places__options--custom places__options--opened">
-      {sortingOptions && sortingOptions.length > 0 && sortingOptions.map((option) => (
+    <ul className="places__options places__options--custom places__options--opened" onClick={(e) => e.stopPropagation()}>
+      {SORTING_OPTIONS && SORTING_OPTIONS.length > 0 && SORTING_OPTIONS.map((option) => (
         <li
           className={`places__option${activeSort === option.value ? ' places__option--active' : ''}`}
           tabIndex={0}
           key={option.value}
+          onClick={() => onSelect(option.value)}
         >
           {option.label}
         </li>
