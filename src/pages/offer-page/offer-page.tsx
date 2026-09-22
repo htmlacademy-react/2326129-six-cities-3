@@ -4,19 +4,15 @@ import { OfferItems } from './components/offer-items/offer-items';
 import { useParams } from 'react-router-dom';
 import { getAuthorizationStatus } from '../../authorization-status';
 import { AuthorizationStatus } from '../../const';
-import { ApartmentType, OfferPreview } from './types/types';
+import { ApartmentType } from './types/types';
 import { PageNotFound } from '../page-not-found/page-not-found';
 import { ReviewForm } from './components/review-form/review-form';
 import { getFullOffer } from '../../mocks';
 import { Map } from '../../components/map';
 import { PlaceCard } from '../../components/place-card/place-card';
 import { getNearOffers } from './utils/utils';
-import { useState } from 'react';
 import { ReviewList } from './components/review-list/review-list';
-
-type OfferPageProps = {
-  offers: OfferPreview[];
-}
+import { useAppSelector } from '../../hooks/store';
 
 function capitalizeFirstLetterType(str: ApartmentType): string {
   if (!str) {
@@ -25,13 +21,13 @@ function capitalizeFirstLetterType(str: ApartmentType): string {
   return str.charAt(0).toUpperCase() + str.slice(1);
 }
 
-function OfferPage({ offers }: OfferPageProps): JSX.Element {
+function OfferPage(): JSX.Element {
+  const offers = useAppSelector((state) => state.offers);
   const { id } = useParams();
   const authorizationStatus = getAuthorizationStatus();
   const currentOffer = id ? getFullOffer(id) : undefined;
 
   const foundOffer = offers.find((item) => item.id === id);
-  const [activeOfferId, setActiveOfferId] = useState<string | null>(foundOffer?.id ?? null);
 
   if(!foundOffer || !currentOffer) {
     return <PageNotFound type='offer'/>;
@@ -133,7 +129,7 @@ function OfferPage({ offers }: OfferPageProps): JSX.Element {
               </div>
               <section className="offer__reviews reviews">
                 <h2 className="reviews__title">Reviews &middot; <span className="reviews__amount">{reviews.length}</span></h2>
-                <ReviewList reviews={reviews} />
+                {reviews && reviews.length > 0 && <ReviewList reviews={reviews} />}
                 {authorizationStatus === AuthorizationStatus.Auth && (
                   <ReviewForm />
                 )}
@@ -144,7 +140,7 @@ function OfferPage({ offers }: OfferPageProps): JSX.Element {
             className="offer__map"
             offers={offersForMap}
             city={foundOffer.city}
-            activeOfferId={activeOfferId}
+            activeOfferId={currentOffer.id}
           />
         </section>
         <div className="container">
@@ -156,8 +152,6 @@ function OfferPage({ offers }: OfferPageProps): JSX.Element {
                   key={offer.id}
                   offer={offer}
                   variant='nearby'
-                  onMouseEnter={() => setActiveOfferId(offer.id)}
-                  onMouseLeave={() => setActiveOfferId(foundOffer.id)}
                 />
               ))}
             </div>
