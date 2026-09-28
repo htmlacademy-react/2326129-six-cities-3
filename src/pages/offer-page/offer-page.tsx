@@ -2,17 +2,18 @@ import { Helmet } from 'react-helmet-async';
 import { OfferGallery } from './components/offer-gallery/offer-gallery';
 import { OfferItems } from './components/offer-items/offer-items';
 import { useParams } from 'react-router-dom';
-import { getAuthorizationStatus } from '../../authorization-status';
 import { AuthorizationStatus } from '../../const';
 import { ApartmentType } from './types/types';
 import { PageNotFound } from '../page-not-found/page-not-found';
 import { ReviewForm } from './components/review-form/review-form';
-import { getFullOffer } from '../../mocks';
 import { Map } from '../../components/map';
 import { PlaceCard } from '../../components/place-card/place-card';
 import { getNearOffers } from './utils/utils';
 import { ReviewList } from './components/review-list/review-list';
-import { useAppSelector } from '../../hooks/store';
+import { useAppDispatch, useAppSelector } from '../../hooks/store';
+import { useEffect } from 'react';
+import { fetchOfferByIdAction } from '../../types/api-actions';
+import LoadingScreen from '../loading-screen/loading-screen';
 
 function capitalizeFirstLetterType(str: ApartmentType): string {
   if (!str) {
@@ -22,19 +23,29 @@ function capitalizeFirstLetterType(str: ApartmentType): string {
 }
 
 function OfferPage(): JSX.Element {
+  const dispatch = useAppDispatch();
   const offers = useAppSelector((state) => state.offers);
   const { id } = useParams();
-  const authorizationStatus = getAuthorizationStatus();
-  const currentOffer = id ? getFullOffer(id) : undefined;
+  const authorizationStatus = useAppSelector((state) => state.authorizationStatus);
+  const currentOffer = useAppSelector((state) => state.currentOffer);
+  const isOfferLoading = useAppSelector((state) => state.isOfferLoading);
 
-  const foundOffer = offers.find((item) => item.id === id);
+  useEffect(() => {
+    if(id) {
+      dispatch(fetchOfferByIdAction(id));
+    }
+  }, [id, dispatch]);
 
-  if(!foundOffer || !currentOffer) {
+  if(isOfferLoading) {
+    return <LoadingScreen />;
+  }
+
+  if(!currentOffer) {
     return <PageNotFound type='offer'/>;
   }
 
-  const nearOffers = getNearOffers(offers, foundOffer);
-  const offersForMap = [foundOffer, ...nearOffers];
+  const nearOffers = getNearOffers(offers, currentOffer);
+  const offersForMap = [currentOffer, ...nearOffers];
 
   const {
     images,
@@ -106,7 +117,7 @@ function OfferPage(): JSX.Element {
               </div>
               <div className="offer__inside">
                 <h2 className="offer__inside-title">What&apos;s inside</h2>
-                {<OfferItems />}
+                <OfferItems />
               </div>
               <div className="offer__host">
                 <h2 className="offer__host-title">Meet the host</h2>
@@ -139,7 +150,7 @@ function OfferPage(): JSX.Element {
           <Map
             className="offer__map"
             offers={offersForMap}
-            city={foundOffer.city}
+            city={currentOffer.city}
             activeOfferId={currentOffer.id}
           />
         </section>

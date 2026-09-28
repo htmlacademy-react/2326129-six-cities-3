@@ -4,12 +4,10 @@ import { OffersSection } from '../offer-page/components/offers-section/offers-se
 import { Map } from '../../components/map/map';
 import { CITIES } from './const/const';
 import { useAppDispatch, useAppSelector } from '../../hooks/store';
-import { loadOffers, setCity } from '../../store/action';
+import { setCity } from '../../store/action';
 import { City } from '../offer-page/types/types';
-import { useEffect, useState } from 'react';
-import { offers as mockOffers } from '../../mocks';
-import { SortingOption } from '../../const';
-
+import { useState } from 'react';
+import { SortingOption, CITY_LOCATIONS } from '../../const';
 
 function MainPage(): JSX.Element {
   const dispatch = useAppDispatch();
@@ -17,10 +15,6 @@ function MainPage(): JSX.Element {
   const selectedCity = useAppSelector((state) => state.city);
 
   const [sortingOption, setSortingOption] = useState<SortingOption>('popular');
-
-  useEffect(() => {
-    dispatch(loadOffers(mockOffers));
-  }, [dispatch]);
 
   const [activeOfferId, setActiveOfferId] = useState<string | null>(null);
 
@@ -45,8 +39,7 @@ function MainPage(): JSX.Element {
     ? currentOffers[0].city
     : {
       name: selectedCity,
-      location: { latitude: 52.37454, longitude: 4.897976, zoom: 12 },
-    };
+      location: CITY_LOCATIONS[selectedCity]};
 
   return (
     <div className="page page--gray page--main">
