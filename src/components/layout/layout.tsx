@@ -1,13 +1,23 @@
 import { Outlet, Link, useLocation } from 'react-router-dom';
 import { AppRoute, AuthorizationStatus } from '../../const';
 import { getLayoutState } from '../../utils';
-import { getAuthorizationStatus } from '../../authorization-status';
+import { useAppDispatch, useAppSelector } from '../../hooks/store';
+import { logoutAction } from '../../types/api-actions';
 
+function Layout(): JSX.Element {
+  const { pathname } = useLocation();
+  const dispatch = useAppDispatch();
 
-function Layout (): JSX.Element {
-  const {pathname} = useLocation();
-  const {rootClassName, logoLinkClassName, shouldRenderUser, shouldRenderFooter} = getLayoutState(pathname as AppRoute);
-  const authorizationStatus = getAuthorizationStatus();
+  const { rootClassName, logoLinkClassName, shouldRenderUser, shouldRenderFooter } =
+    getLayoutState(pathname as AppRoute);
+
+  const authorizationStatus = useAppSelector((state) => state.authorizationStatus);
+  const isAuthorized = authorizationStatus === AuthorizationStatus.Auth;
+
+  const handleLogout = (evt: React.MouseEvent<HTMLAnchorElement>) => {
+    evt.preventDefault();
+    dispatch(logoutAction());
+  };
 
   return (
     <div className={`page page--gray${rootClassName}`}>
@@ -19,33 +29,41 @@ function Layout (): JSX.Element {
                 <img className="header__logo" src="img/logo.svg" alt="6 cities logo" width="81" height="41" />
               </Link>
             </div>
-            {
-              shouldRenderUser && (
-                <nav className="header__nav">
-                  <ul className="header__nav-list">
-                    <li className="header__nav-item user">
-                      <Link to={AppRoute.Login} className="header__nav-link header__nav-link--profile">
-                        <div className="header__avatar-wrapper user__avatar-wrapper">
-                        </div>
-                        {authorizationStatus === AuthorizationStatus.Auth ? (
-                          <>
-                            <span className="header__user-name user__name">Oliver.conner@gmail.com</span>
-                            <span className="header__favorite-count">3</span>
-                          </>
-                        ) : <span className="header__login">Sign in</span>}
-                      </Link>
-                    </li>
-                    {authorizationStatus === AuthorizationStatus.Auth && (
+            {shouldRenderUser && (
+              <nav className="header__nav">
+                <ul className="header__nav-list">
+                  {isAuthorized ? (
+                    <>
+                      <li className="header__nav-item user">
+                        <Link to={AppRoute.Favorites} className="header__nav-link header__nav-link--profile">
+                          <div className="header__avatar-wrapper user__avatar-wrapper" />
+                          <span className="header__user-name user__name">
+                            Oliver.conner@gmail.com
+                          </span>
+                          <span className="header__favorite-count">3</span>
+                        </Link>
+                      </li>
                       <li className="header__nav-item">
-                        <Link to={AppRoute.Login} className="header__nav-link">
+                        <Link
+                          to="#"
+                          className="header__nav-link"
+                          onClick={handleLogout}
+                        >
                           <span className="header__signout">Sign out</span>
                         </Link>
                       </li>
-                    )}
-                  </ul>
-                </nav>
-              )
-            }
+                    </>
+                  ) : (
+                    <li className="header__nav-item user">
+                      <Link to={AppRoute.Login} className="header__nav-link header__nav-link--profile">
+                        <div className="header__avatar-wrapper user__avatar-wrapper" />
+                        <span className="header__login">Sign in</span>
+                      </Link>
+                    </li>
+                  )}
+                </ul>
+              </nav>
+            )}
           </div>
         </div>
       </header>

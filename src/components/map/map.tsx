@@ -2,15 +2,20 @@ import leaflet, { LayerGroup } from 'leaflet';
 import 'leaflet/dist/leaflet.css';
 import { useEffect, useRef } from 'react';
 import { useMap } from '../../hooks/usemap';
-import { City, OfferPreview } from '../../pages/offer-page/types/types';
+import { City, Location } from '../../pages/offer-page/types/types';
 import { DEFAULT_MARKER_ICON, ACTIVE_MARKER_ICON } from './const';
+
+type MapPoint = {
+  id: string;
+  location: Location;
+};
 
 type MapProps = {
   className?: string;
   city: City;
-  offers: OfferPreview[];
+  offers: MapPoint[];
   activeOfferId?: string | null;
-}
+};
 
 export const Map = ({ className, city, offers, activeOfferId}: MapProps): JSX.Element => {
   const mapContainerRef = useRef<HTMLDivElement>(null);

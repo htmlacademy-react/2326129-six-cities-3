@@ -1,10 +1,10 @@
-import { OfferPreview } from '../types/types';
+import { Offer, OfferPreview } from '../types/types';
 
 const MAX_NEAR_OFFERS = 3;
 
 export function getNearOffers(
   offers: OfferPreview[],
-  currentOffer: OfferPreview
+  currentOffer: Offer | OfferPreview
 ): OfferPreview[] {
   return offers
     .filter(
