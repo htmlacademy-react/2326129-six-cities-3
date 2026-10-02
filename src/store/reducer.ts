@@ -1,8 +1,9 @@
 import { AuthorizationStatus } from '../const';
 import { CityName } from '../pages/main-page/const/const';
 import { Offer, OfferPreview } from '../pages/offer-page/types/types';
-import { loadOffer, loadOffers, requiredAuthorization, setCity, setError, setOfferLoading, setOffersDataLoadingStatus } from './action';
+import { loadOffer, loadOffers, requiredAuthorization, setCity, setError, setOfferLoading, setOffersDataLoadingStatus, setUser } from './action';
 import { createReducer } from '@reduxjs/toolkit';
+import { UserData } from './auth-data';
 
 type OffersState = {
   city: CityName;
@@ -12,6 +13,7 @@ type OffersState = {
   isOffersDataLoading: boolean;
   isOfferLoading: boolean;
   error: string | null;
+  user: UserData | null;
 }
 
 const initialState: OffersState = {
@@ -22,6 +24,7 @@ const initialState: OffersState = {
   isOffersDataLoading: false,
   isOfferLoading: false,
   error: null,
+  user: null
 };
 
 const reducer = createReducer(initialState, (builder) => {
@@ -46,6 +49,9 @@ const reducer = createReducer(initialState, (builder) => {
     })
     .addCase(setOfferLoading, (state, action) => {
       state.isOfferLoading = action.payload;
+    })
+    .addCase(setUser, (state, action) => {
+      state.user = action.payload;
     });
 });
 

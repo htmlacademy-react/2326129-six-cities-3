@@ -7,7 +7,8 @@ import { useAppDispatch, useAppSelector } from '../../hooks/store';
 import { setCity } from '../../store/action';
 import { City } from '../offer-page/types/types';
 import { useState } from 'react';
-import { SortingOption, CITY_LOCATIONS } from '../../const';
+import { SortingOption, CITY_LOCATIONS, AuthorizationStatus } from '../../const';
+import LoadingScreen from '../loading-screen/loading-screen';
 
 function MainPage(): JSX.Element {
   const dispatch = useAppDispatch();
@@ -40,6 +41,14 @@ function MainPage(): JSX.Element {
     : {
       name: selectedCity,
       location: CITY_LOCATIONS[selectedCity]};
+
+  const authorizationStatus = useAppSelector((state) => state.authorizationStatus);
+  const isOffersDataLoading = useAppSelector((state) => state.isOffersDataLoading);
+  if (authorizationStatus === AuthorizationStatus.Unknown || isOffersDataLoading) {
+    return (
+      <LoadingScreen />
+    );
+  }
 
   return (
     <div className="page page--gray page--main">

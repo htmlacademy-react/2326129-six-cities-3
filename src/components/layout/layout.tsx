@@ -7,11 +7,14 @@ import { logoutAction } from '../../types/api-actions';
 function Layout(): JSX.Element {
   const { pathname } = useLocation();
   const dispatch = useAppDispatch();
+  const offers = useAppSelector((state) => state.offers);
+  const favoriteAmount = offers.filter((offer) => offer.isFavorite).length;
 
   const { rootClassName, logoLinkClassName, shouldRenderUser, shouldRenderFooter } =
     getLayoutState(pathname as AppRoute);
 
   const authorizationStatus = useAppSelector((state) => state.authorizationStatus);
+  const user = useAppSelector((state) => state.user);
   const isAuthorized = authorizationStatus === AuthorizationStatus.Auth;
 
   const handleLogout = (evt: React.MouseEvent<HTMLAnchorElement>) => {
@@ -32,15 +35,18 @@ function Layout(): JSX.Element {
             {shouldRenderUser && (
               <nav className="header__nav">
                 <ul className="header__nav-list">
-                  {isAuthorized ? (
+                  {isAuthorized && user ? (
                     <>
                       <li className="header__nav-item user">
                         <Link to={AppRoute.Favorites} className="header__nav-link header__nav-link--profile">
-                          <div className="header__avatar-wrapper user__avatar-wrapper" />
+                          <div
+                            className="header__avatar-wrapper user__avatar-wrapper"
+                            style={user?.avatarUrl ? {backgroundImage: `url(${user.avatarUrl})` } : undefined}
+                          />
                           <span className="header__user-name user__name">
-                            Oliver.conner@gmail.com
+                            {user?.email}
                           </span>
-                          <span className="header__favorite-count">3</span>
+                          <span className="header__favorite-count">{favoriteAmount}</span>
                         </Link>
                       </li>
                       <li className="header__nav-item">
