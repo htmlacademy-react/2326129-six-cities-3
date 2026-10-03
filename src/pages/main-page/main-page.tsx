@@ -4,18 +4,19 @@ import { OffersSection } from '../offer-page/components/offers-section/offers-se
 import { Map } from '../../components/map/map';
 import { CITIES } from './const/const';
 import { useAppDispatch, useAppSelector } from '../../hooks/store';
-import { setCity } from '../../store/action';
+import { setCity, setSorting } from '../../store/action';
 import { City } from '../offer-page/types/types';
 import { useState } from 'react';
-import { SortingOption, CITY_LOCATIONS, AuthorizationStatus } from '../../const';
+import { CITY_LOCATIONS, AuthorizationStatus } from '../../const';
 import LoadingScreen from '../loading-screen/loading-screen';
 
 function MainPage(): JSX.Element {
   const dispatch = useAppDispatch();
   const offers = useAppSelector((state) => state.offers);
   const selectedCity = useAppSelector((state) => state.city);
+  const sortingOption = useAppSelector((state) => state.sorting);
 
-  const [sortingOption, setSortingOption] = useState<SortingOption>('popular');
+  // const [sortingOption, setSortingOption] = useState<SortingOption>('popular');
 
   const [activeOfferId, setActiveOfferId] = useState<string | null>(null);
 
@@ -70,7 +71,7 @@ function MainPage(): JSX.Element {
           <div className="cities__places-container container">
             <OffersSection
               sortingOption={sortingOption}
-              onSortChange={setSortingOption}
+              onSortChange={(option) => dispatch(setSorting(option))}
               offers={currentOffers}
               onCardHover={(offer) => setActiveOfferId(offer ? offer.id : null)}
             />

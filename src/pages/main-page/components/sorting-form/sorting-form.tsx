@@ -17,9 +17,13 @@ function SortingForm({ sortingOption, onSortChange }: SortingFormProps): JSX.Ele
     setIsOpen(false);
   };
 
-
   return (
-    <form className="places__sorting" action="#" method="get" onClick={() => setIsOpen((prev) => !prev)} >
+    <form
+      className="places__sorting"
+      action="#"
+      method="get"
+      onClick={() => setIsOpen((prev) => !prev)}
+    >
       <span className="places__sorting-caption">Sort by</span>
       <span className="places__sorting-type" tabIndex={0}>
         {activeOption?.label ?? 'Popular'}
@@ -28,7 +32,10 @@ function SortingForm({ sortingOption, onSortChange }: SortingFormProps): JSX.Ele
         </svg>
       </span>
       {isOpen && (
-        <SortingItems activeSort='popular' onSelect={handleSelect} />)}
+        <SortingItems
+          activeSort={sortingOption}
+          onSelect={handleSelect}
+        />)}
     </form>
   );
 }

@@ -12,7 +12,7 @@ import { getNearOffers } from './utils/utils';
 import { ReviewList } from './components/review-list/review-list';
 import { useAppDispatch, useAppSelector } from '../../hooks/store';
 import { useEffect } from 'react';
-import { fetchOfferByIdAction } from '../../types/api-actions';
+import { fetchOfferByIdAction } from '../../store/api-actions';
 import LoadingScreen from '../loading-screen/loading-screen';
 
 function capitalizeFirstLetterType(str: ApartmentType): string {

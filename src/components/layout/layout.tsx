@@ -2,7 +2,7 @@ import { Outlet, Link, useLocation } from 'react-router-dom';
 import { AppRoute, AuthorizationStatus } from '../../const';
 import { getLayoutState } from '../../utils';
 import { useAppDispatch, useAppSelector } from '../../hooks/store';
-import { logoutAction } from '../../types/api-actions';
+import { logoutAction } from '../../store/api-actions';
 
 function Layout(): JSX.Element {
   const { pathname } = useLocation();
