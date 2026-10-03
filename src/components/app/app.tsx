@@ -4,10 +4,8 @@ import { HelmetProvider } from 'react-helmet-async';
 import { Layout } from '../layout/layout';
 import ScrollToTop from '../scroll-to-top/scroll-to-top';
 import PrivateRoute from '../private-route/private-route';
-import { AppRoute, AuthorizationStatus } from '../../const';
-import { favorites } from '../../mocks';
+import { AppRoute } from '../../const';
 import { useAppSelector } from '../../hooks/store';
-import LoadingScreen from '../../pages/loading-screen/loading-screen';
 import HistoryRouter from '../history-route/history-route';
 import browserHistory from '../../browser-history';
 
@@ -28,13 +26,10 @@ const PageNotFound = lazy(() => import('../../pages/page-not-found/page-not-foun
 
 function App(): JSX.Element {
   const authorizationStatus = useAppSelector((state) => state.authorizationStatus);
-  const isOffersDataLoading = useAppSelector((state) => state.isOffersDataLoading);
-  // const authorizationStatus = getAuthorizationStatus();
-  if (authorizationStatus === AuthorizationStatus.Unknown || isOffersDataLoading) {
-    return (
-      <LoadingScreen />
-    );
-  }
+  const offers = useAppSelector((state) => state.offers);
+
+  const favoriteOffers = offers.filter((offer) => offer.isFavorite);
+
 
   return (
     <HelmetProvider>
@@ -48,7 +43,7 @@ function App(): JSX.Element {
                 path={AppRoute.Favorites}
                 element={
                   <PrivateRoute authorizationStatus={authorizationStatus}>
-                    <FavoritesPage offers={favorites} />
+                    <FavoritesPage offers={favoriteOffers} />
                   </PrivateRoute>
                 }
               />
