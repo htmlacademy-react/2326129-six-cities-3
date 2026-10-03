@@ -35,7 +35,9 @@ export type SortingOption = typeof SORTING_OPTIONS[number]['value'];
 export enum APIRoute {
   Offers = '/offers',
   Login = '/login',
-  Logout = '/logout'
+  Logout = '/logout',
+  Nearby = '/nearby',
+  Comments = '/comments'
 }
 
 export const CITY_LOCATIONS: Record<CityName, { latitude: number; longitude: number; zoom: number }> = {

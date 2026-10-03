@@ -1,6 +1,6 @@
 import { createAction } from '@reduxjs/toolkit';
 import { CityName } from '../pages/main-page/const/const';
-import { Offer, OfferPreview } from '../pages/offer-page/types/types';
+import { Offer, OfferPreview, Review } from '../pages/offer-page/types/types';
 import { AuthorizationStatus, SortingOption } from '../const';
 import { UserData } from './auth-data';
 
@@ -21,3 +21,11 @@ export const setError = createAction<string | null>('app/setError');
 export const setUser = createAction<UserData | null>('user/setUser');
 
 export const setSorting = createAction<SortingOption>('sorting/setSorting');
+
+export const loadOffersNearby = createAction<OfferPreview[]>('offer/loadOffersNearby');
+
+export const loadComments = createAction<Review[]>('offer/loadComments');
+
+export const addComment = createAction<Review>('offer/addComment');
+
+export const setCommentsLoading = createAction<boolean>('offer/setCommentsLoading');

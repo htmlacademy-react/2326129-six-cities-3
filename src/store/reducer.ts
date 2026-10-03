@@ -1,7 +1,7 @@
 import { AuthorizationStatus, SortingOption } from '../const';
 import { CityName } from '../pages/main-page/const/const';
-import { Offer, OfferPreview } from '../pages/offer-page/types/types';
-import { loadOffer, loadOffers, requiredAuthorization, setCity, setError, setOfferLoading, setOffersDataLoadingStatus, setSorting, setUser } from './action';
+import { Offer, OfferPreview, Review } from '../pages/offer-page/types/types';
+import { addComment, loadComments, loadOffer, loadOffers, loadOffersNearby, requiredAuthorization, setCity, setCommentsLoading, setError, setOfferLoading, setOffersDataLoadingStatus, setSorting, setUser } from './action';
 import { createReducer } from '@reduxjs/toolkit';
 import { UserData } from './auth-data';
 
@@ -9,21 +9,28 @@ type OffersState = {
   city: CityName;
   offers: OfferPreview[];
   currentOffer: Offer | null;
+  nearbyOffers: OfferPreview[];
+  comments: Review[];
   authorizationStatus: AuthorizationStatus;
   isOffersDataLoading: boolean;
   isOfferLoading: boolean;
+  isCommentLoading: boolean;
   error: string | null;
   user: UserData | null;
   sorting: SortingOption;
+
 }
 
 const initialState: OffersState = {
   city: 'Paris',
   offers: [],
   currentOffer: null,
+  nearbyOffers: [],
+  comments: [],
   authorizationStatus: AuthorizationStatus.Unknown,
   isOffersDataLoading: false,
   isOfferLoading: false,
+  isCommentLoading: false,
   error: null,
   user: null,
   sorting: 'popular'
@@ -43,6 +50,18 @@ const reducer = createReducer(initialState, (builder) => {
     })
     .addCase(loadOffer, (state, action) => {
       state.currentOffer = action.payload;
+    })
+    .addCase(loadOffersNearby, (state, action) => {
+      state.nearbyOffers = action.payload;
+    })
+    .addCase(loadComments, (state, action) => {
+      state.comments = action.payload;
+    })
+    .addCase(addComment, (state, action) => {
+      state.comments.push(action.payload);
+    })
+    .addCase(setCommentsLoading, (state, action) => {
+      state.isCommentLoading = action.payload;
     })
     .addCase(setError, (state, action) => {
       state.error = action.payload;

@@ -1,6 +1,6 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
-import { Offer, OfferPreview } from '../pages/offer-page/types/types';
-import { loadOffer, loadOffers, requiredAuthorization, setError, setOfferLoading, setOffersDataLoadingStatus, setUser } from './action';
+import { Offer, OfferPreview, Review } from '../pages/offer-page/types/types';
+import { addComment, loadComments, loadOffer, loadOffers, loadOffersNearby, requiredAuthorization, setError, setOfferLoading, setOffersDataLoadingStatus, setUser } from './action';
 import { AppDispatch, State } from '../types/state';
 import { AxiosInstance } from 'axios';
 import { APIRoute, AuthorizationStatus, TIMEOUT_SHOW_ERROR } from '../const';
@@ -54,6 +54,50 @@ export const fetchOfferByIdAction = createAsyncThunk<
     } finally {
       dispatch(setOfferLoading(false));
     }
+  }
+);
+
+export const fetchOffersNearbyAction = createAsyncThunk<
+void,
+string,
+{ dispatch: AppDispatch; state: State; extra: AxiosInstance }
+>(
+  'data/fetchOffersNearby',
+  async (id, { dispatch, extra: api }) => {
+    try {
+      const { data } = await api.get<OfferPreview[]>(`${APIRoute.Offers}/${id}${APIRoute.Nearby}`);
+      dispatch(loadOffersNearby(data));
+    } catch {
+      dispatch(loadOffersNearby([]));
+    }
+  }
+);
+
+export const fetchCommentsAction = createAsyncThunk<
+void,
+string,
+{ dispatch: AppDispatch; state: State; extra: AxiosInstance }
+>(
+  'data/fetchComments',
+  async (id, { dispatch, extra: api }) => {
+    try {
+      const { data } = await api.get<Review[]>(`${APIRoute.Comments}/${id}`);
+      dispatch(loadComments(data));
+    } catch {
+      dispatch(loadComments([]));
+    }
+  }
+);
+
+export const postCommentAction = createAsyncThunk<
+void,
+{offerId: string; comment: string; rating: number},
+{dispatch: AppDispatch; state: State; extra: AxiosInstance}
+>(
+  'data/postComment',
+  async ({ offerId, comment, rating }, { dispatch, extra: api }) => {
+    const { data } = await api.post<Review>(`${APIRoute.Comments}/${offerId}`, { comment, rating });
+    dispatch(addComment(data));
   }
 );
 
