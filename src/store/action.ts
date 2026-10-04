@@ -29,3 +29,8 @@ export const loadComments = createAction<Review[]>('offer/loadComments');
 export const addComment = createAction<Review>('offer/addComment');
 
 export const setCommentsLoading = createAction<boolean>('offer/setCommentsLoading');
+
+export const loadFavoriteOffers = createAction<OfferPreview[]>('offer/loadFavorites');
+
+export const updateOfferFavoritesStatus = createAction<OfferPreview>('offer/updateOfferFavoritesStatus');
+

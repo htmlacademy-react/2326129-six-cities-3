@@ -1,6 +1,6 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
 import { Offer, OfferPreview, Review } from '../pages/offer-page/types/types';
-import { addComment, loadComments, loadOffer, loadOffers, loadOffersNearby, requiredAuthorization, setError, setOfferLoading, setOffersDataLoadingStatus, setUser } from './action';
+import { addComment, loadComments, loadFavoriteOffers, loadOffer, loadOffers, loadOffersNearby, requiredAuthorization, setError, setOfferLoading, setOffersDataLoadingStatus, setUser, updateOfferFavoritesStatus } from './action';
 import { AppDispatch, State } from '../types/state';
 import { AxiosInstance } from 'axios';
 import { APIRoute, AuthorizationStatus, TIMEOUT_SHOW_ERROR } from '../const';
@@ -158,3 +158,32 @@ export const logoutAction = createAsyncThunk<
     dispatch(requiredAuthorization(AuthorizationStatus.NoAuth));
   }
 );
+
+export const loadFavoriteOffersAction = createAsyncThunk<
+  void,
+  undefined,
+  {dispatch: AppDispatch; state: State; extra: AxiosInstance}
+>(
+  'offer/loadFavoriteOffers',
+  async (_arg, {dispatch, extra: api}) => {
+    try {
+      const { data } = await api.get<OfferPreview[]>(APIRoute.Favorite);
+      dispatch(loadFavoriteOffers(data));
+    } catch {
+      dispatch(loadFavoriteOffers([]));
+    }
+  }
+);
+
+export const changeFavoriteStatusAction = createAsyncThunk<
+  void,
+  { offerId: string; status: 0 | 1},
+  { dispatch: AppDispatch; state: State; extra: AxiosInstance}
+>(
+  'offer/changeFavoriteStatus',
+  async ({ offerId, status }, {dispatch, extra: api}) => {
+    const { data } = await api.post<OfferPreview>(`${APIRoute.Favorite}/${offerId}/${status}`);
+    dispatch(updateOfferFavoritesStatus(data));
+  }
+);
+

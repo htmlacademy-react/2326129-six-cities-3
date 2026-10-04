@@ -1,16 +1,22 @@
 import { Helmet } from 'react-helmet-async';
 import { OfferPreview } from '../offer-page/types/types';
 import { FavoritesList } from './components/favorites-list/favorites-list';
+import { useAppDispatch, useAppSelector } from '../../hooks/store';
+import { useEffect } from 'react';
+import { loadFavoriteOffersAction } from '../../store/api-actions';
+import { EmptyFavoritesList } from './components/empty-favorites-list/empty-favorites-list';
 
-type FavoritesPageProps = {
-  offers: OfferPreview[];
-};
+function FavoritesPage(): JSX.Element {
+  const dispatch = useAppDispatch();
+  const favoriteOffers = useAppSelector((state) => state.favoriteOffers);
 
-function FavoritesPage({ offers }: FavoritesPageProps): JSX.Element {
+  useEffect(() => {
+    dispatch(loadFavoriteOffersAction());
+  }, [dispatch]);
 
   const groupedByCity: Record<string, OfferPreview[]> = {};
 
-  offers.forEach((offer) => {
+  favoriteOffers.forEach((offer) => {
     const cityName = offer.city.name;
     if (!groupedByCity[cityName]) {
       groupedByCity[cityName] = [];
@@ -25,24 +31,22 @@ function FavoritesPage({ offers }: FavoritesPageProps): JSX.Element {
       <Helmet>
         <title>6 cities: favorites</title>
       </Helmet>
-      <main className="page__main page__main--favorites">
-        <div className="page__favorites-container container">
-          <section className="favorites">
-            <h1 className="favorites__title">Saved listing</h1>
-            {!cityGroups || cityGroups.length === 0 ? (
-              <div className="favorites__status-wrapper">
-                <p className="favorites__status">Nothing yet saved.</p>
-              </div>
-            ) : (
+      {cityGroups.length === 0 ? (
+        <EmptyFavoritesList/>
+      ) : (
+        <main className="page__main page__main--favorites">
+          <div className="page__favorites-container container">
+            <section className="favorites">
+              <h1 className="favorites__title">Saved listing</h1>
               <ul className="favorites__list">
                 {cityGroups && cityGroups.length > 0 && cityGroups.map(([city, cityOffers]) => (
                   <FavoritesList key={city} city={city} offers={cityOffers} />
                 ))}
               </ul>
-            )}
-          </section>
-        </div>
-      </main>
+            </section>
+          </div>
+        </main>
+      )}
     </div>
   );
 }

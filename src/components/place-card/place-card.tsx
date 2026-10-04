@@ -1,7 +1,9 @@
 // src/components/place-card/place-card.tsx
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { OfferPreview } from '../../pages/offer-page/types/types';
-import { AppRoute } from '../../const';
+import { AppRoute, AuthorizationStatus } from '../../const';
+import { useAppDispatch, useAppSelector } from '../../hooks/store';
+import { changeFavoriteStatusAction } from '../../store/api-actions';
 
 type PlaceCardVariant = 'cities' | 'favorites' | 'nearby';
 
@@ -18,6 +20,11 @@ function PlaceCard({
   onMouseEnter,
   onMouseLeave,
 }: PlaceCardProps): JSX.Element {
+  const dispatch = useAppDispatch();
+  const navigate = useNavigate();
+  const authorizationStatus = useAppSelector((state) => state.authorizationStatus);
+  const isAuthorized = authorizationStatus === AuthorizationStatus.Auth;
+
   const { id, title, type, price, rating, previewImage, isFavorite, isPremium } = offer;
   const starRating = (rating / 5) * 100;
   const placeType = type.charAt(0).toUpperCase() + type.slice(1);
@@ -27,6 +34,19 @@ function PlaceCard({
 
   const imageWidth = isFavorites ? 150 : 260;
   const imageHeight = isFavorites ? 110 : 200;
+
+  const handleBookmark = (evt: React.MouseEvent<HTMLButtonElement>) => {
+    evt.preventDefault();
+    evt.stopPropagation();
+    if (!isAuthorized) {
+      navigate(AppRoute.Login);
+      return;
+    }
+    dispatch(changeFavoriteStatusAction({
+      offerId: id,
+      status: isFavorite ? 0 : 1
+    }));
+  };
 
   let articleClass = 'cities__card place-card';
   let imageWrapperClass = 'cities__image-wrapper place-card__image-wrapper';
@@ -76,6 +96,7 @@ function PlaceCard({
               isFavorite ? 'place-card__bookmark-button--active' : ''
             } button`}
             type="button"
+            onClick={handleBookmark}
           >
             <svg className="place-card__bookmark-icon" width="18" height="19">
               <use xlinkHref="#icon-bookmark" />

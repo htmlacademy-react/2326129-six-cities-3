@@ -1,8 +1,8 @@
 import { Helmet } from 'react-helmet-async';
 import { OfferGallery } from './components/offer-gallery/offer-gallery';
 import { OfferItems } from './components/offer-items/offer-items';
-import { useParams } from 'react-router-dom';
-import { AuthorizationStatus } from '../../const';
+import { useNavigate, useParams } from 'react-router-dom';
+import { AppRoute, AuthorizationStatus } from '../../const';
 import { ApartmentType } from './types/types';
 import { PageNotFound } from '../page-not-found/page-not-found';
 import { ReviewForm } from './components/review-form/review-form';
@@ -11,7 +11,7 @@ import { PlaceCard } from '../../components/place-card/place-card';
 import { ReviewList } from './components/review-list/review-list';
 import { useAppDispatch, useAppSelector } from '../../hooks/store';
 import { useEffect } from 'react';
-import { fetchCommentsAction, fetchOfferByIdAction, fetchOffersNearbyAction } from '../../store/api-actions';
+import { changeFavoriteStatusAction, fetchCommentsAction, fetchOfferByIdAction, fetchOffersNearbyAction } from '../../store/api-actions';
 import LoadingScreen from '../loading-screen/loading-screen';
 
 const AMOUNT_NEARBY = 3;
@@ -26,6 +26,7 @@ function capitalizeFirstLetterType(str: ApartmentType): string {
 function OfferPage(): JSX.Element {
   const dispatch = useAppDispatch();
   const { id } = useParams();
+  const navigate = useNavigate();
   const authorizationStatus = useAppSelector((state) => state.authorizationStatus);
   const currentOffer = useAppSelector((state) => state.currentOffer);
   const isOfferLoading = useAppSelector((state) => state.isOfferLoading);
@@ -68,6 +69,17 @@ function OfferPage(): JSX.Element {
     isFavorite
   } = currentOffer;
 
+  const handleBookmarkClick = () => {
+    if (authorizationStatus !== AuthorizationStatus.Auth) {
+      navigate(AppRoute.Login);
+      return;
+    }
+    dispatch(changeFavoriteStatusAction({
+      offerId: currentOffer.id,
+      status: isFavorite ? 0 : 1,
+    }));
+  };
+
   const bedroomsAmount = `${bedrooms} ${bedrooms === 1 ? 'Bedroom' : 'Bedrooms'}`;
   const adultsAmount = `Max ${maxAdults} ${maxAdults === 1 ? 'adult' : 'adults'}`;
 
@@ -92,7 +104,12 @@ function OfferPage(): JSX.Element {
                 <h1 className="offer__name">
                   {title}
                 </h1>
-                <button className={`offer__bookmark-button ${isFavorite && 'offer__bookmark-button--active'} button`} type="button">
+                <button className={`offer__bookmark-button ${
+                  isFavorite ? 'offer__bookmark-button--active' : ''
+                } button`}
+                type="button"
+                onClick={handleBookmarkClick}
+                >
                   <svg className="offer__bookmark-icon" width="31" height="33">
                     <use xlinkHref="#icon-bookmark"></use>
                   </svg>
