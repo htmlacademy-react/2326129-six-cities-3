@@ -2,13 +2,14 @@ import { Outlet, Link, useLocation } from 'react-router-dom';
 import { AppRoute, AuthorizationStatus } from '../../const';
 import { getLayoutState } from '../../utils';
 import { useAppDispatch, useAppSelector } from '../../hooks/store';
-import { logoutAction } from '../../types/api-actions';
+import { logoutAction } from '../../store/api-actions';
 
 function Layout(): JSX.Element {
   const { pathname } = useLocation();
   const dispatch = useAppDispatch();
-  const offers = useAppSelector((state) => state.offers);
-  const favoriteAmount = offers.filter((offer) => offer.isFavorite).length;
+  // const offers = useAppSelector((state) => state.offers);
+  const favoriteOffers = useAppSelector((state) => state.favoriteOffers);
+  const favoriteAmount = favoriteOffers.length;
 
   const { rootClassName, logoLinkClassName, shouldRenderUser, shouldRenderFooter } =
     getLayoutState(pathname as AppRoute);

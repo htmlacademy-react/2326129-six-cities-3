@@ -2,7 +2,7 @@ import { FormEvent, useRef } from 'react';
 import { Helmet } from 'react-helmet-async';
 import { Link } from 'react-router-dom';
 import { AppRoute } from '../../const';
-import { loginAction } from '../../types/api-actions';
+import { loginAction } from '../../store/api-actions';
 import { useAppDispatch } from '../../hooks/store';
 
 function LoginPage(): JSX.Element {

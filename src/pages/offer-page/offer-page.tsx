@@ -1,19 +1,20 @@
 import { Helmet } from 'react-helmet-async';
 import { OfferGallery } from './components/offer-gallery/offer-gallery';
 import { OfferItems } from './components/offer-items/offer-items';
-import { useParams } from 'react-router-dom';
-import { AuthorizationStatus } from '../../const';
+import { useNavigate, useParams } from 'react-router-dom';
+import { AppRoute, AuthorizationStatus } from '../../const';
 import { ApartmentType } from './types/types';
 import { PageNotFound } from '../page-not-found/page-not-found';
 import { ReviewForm } from './components/review-form/review-form';
 import { Map } from '../../components/map';
 import { PlaceCard } from '../../components/place-card/place-card';
-import { getNearOffers } from './utils/utils';
 import { ReviewList } from './components/review-list/review-list';
 import { useAppDispatch, useAppSelector } from '../../hooks/store';
 import { useEffect } from 'react';
-import { fetchOfferByIdAction } from '../../types/api-actions';
+import { changeFavoriteStatusAction, fetchCommentsAction, fetchOfferByIdAction, fetchOffersNearbyAction } from '../../store/api-actions';
 import LoadingScreen from '../loading-screen/loading-screen';
+
+const AMOUNT_NEARBY = 3;
 
 function capitalizeFirstLetterType(str: ApartmentType): string {
   if (!str) {
@@ -24,16 +25,26 @@ function capitalizeFirstLetterType(str: ApartmentType): string {
 
 function OfferPage(): JSX.Element {
   const dispatch = useAppDispatch();
-  const offers = useAppSelector((state) => state.offers);
   const { id } = useParams();
+  const navigate = useNavigate();
   const authorizationStatus = useAppSelector((state) => state.authorizationStatus);
   const currentOffer = useAppSelector((state) => state.currentOffer);
   const isOfferLoading = useAppSelector((state) => state.isOfferLoading);
+  const offersNearby = useAppSelector((state) => state.nearbyOffers);
+  const visibleNearby = offersNearby.slice(0, AMOUNT_NEARBY);
+  const comments = useAppSelector((state) => state.comments);
+
+  const offersForMap = currentOffer
+    ? [currentOffer, ...visibleNearby]
+    : visibleNearby;
 
   useEffect(() => {
-    if(id) {
-      dispatch(fetchOfferByIdAction(id));
+    if(!id) {
+      return;
     }
+    dispatch(fetchOfferByIdAction(id));
+    dispatch(fetchOffersNearbyAction(id));
+    dispatch(fetchCommentsAction(id));
   }, [id, dispatch]);
 
   if(isOfferLoading) {
@@ -43,9 +54,6 @@ function OfferPage(): JSX.Element {
   if(!currentOffer) {
     return <PageNotFound type='offer'/>;
   }
-
-  const nearOffers = getNearOffers(offers, currentOffer);
-  const offersForMap = [currentOffer, ...nearOffers];
 
   const {
     images,
@@ -58,9 +66,19 @@ function OfferPage(): JSX.Element {
     host,
     description,
     price,
-    isFavorite,
-    reviews = []
+    isFavorite
   } = currentOffer;
+
+  const handleBookmarkClick = () => {
+    if (authorizationStatus !== AuthorizationStatus.Auth) {
+      navigate(AppRoute.Login);
+      return;
+    }
+    dispatch(changeFavoriteStatusAction({
+      offerId: currentOffer.id,
+      status: isFavorite ? 0 : 1,
+    }));
+  };
 
   const bedroomsAmount = `${bedrooms} ${bedrooms === 1 ? 'Bedroom' : 'Bedrooms'}`;
   const adultsAmount = `Max ${maxAdults} ${maxAdults === 1 ? 'adult' : 'adults'}`;
@@ -86,7 +104,12 @@ function OfferPage(): JSX.Element {
                 <h1 className="offer__name">
                   {title}
                 </h1>
-                <button className={`offer__bookmark-button ${isFavorite && 'offer__bookmark-button--active'} button`} type="button">
+                <button className={`offer__bookmark-button ${
+                  isFavorite ? 'offer__bookmark-button--active' : ''
+                } button`}
+                type="button"
+                onClick={handleBookmarkClick}
+                >
                   <svg className="offer__bookmark-icon" width="31" height="33">
                     <use xlinkHref="#icon-bookmark"></use>
                   </svg>
@@ -139,8 +162,8 @@ function OfferPage(): JSX.Element {
                 </div>
               </div>
               <section className="offer__reviews reviews">
-                <h2 className="reviews__title">Reviews &middot; <span className="reviews__amount">{reviews.length}</span></h2>
-                {reviews && reviews.length > 0 && <ReviewList reviews={reviews} />}
+                <h2 className="reviews__title">Reviews &middot; <span className="reviews__amount">{comments.length}</span></h2>
+                {comments && comments.length > 0 && <ReviewList reviews={comments} />}
                 {authorizationStatus === AuthorizationStatus.Auth && (
                   <ReviewForm />
                 )}
@@ -158,7 +181,7 @@ function OfferPage(): JSX.Element {
           <section className="near-places places">
             <h2 className="near-places__title">Other places in the neighbourhood</h2>
             <div className="near-places__list places__list">
-              {nearOffers.map((offer) : JSX.Element => (
+              {visibleNearby.map((offer) : JSX.Element => (
                 <PlaceCard
                   key={offer.id}
                   offer={offer}

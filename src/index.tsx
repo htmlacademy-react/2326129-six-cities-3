@@ -4,10 +4,17 @@ import App from './components/app/app';
 import ErrorMessage from './components/error-message/error-message';
 import { Provider } from 'react-redux';
 import { store } from './store';
-import { checkAuthAction, fetchOffersAction } from './types/api-actions';
+import { checkAuthAction, fetchOffersAction, loadFavoriteOffersAction } from './store/api-actions';
+import { AuthorizationStatus } from './const';
 
 store.dispatch(fetchOffersAction());
-store.dispatch(checkAuthAction());
+store.dispatch(checkAuthAction())
+  .unwrap()
+  .finally(() => {
+    if (store.getState().authorizationStatus === AuthorizationStatus.Auth) {
+      store.dispatch(loadFavoriteOffersAction());
+    }
+  });
 
 const root = ReactDOM.createRoot(
   document.getElementById('root') as HTMLElement
