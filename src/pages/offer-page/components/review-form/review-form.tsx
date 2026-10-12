@@ -1,4 +1,4 @@
-import { useState, Fragment, ChangeEvent, FormEvent } from 'react';
+import { useState, Fragment, ChangeEvent, FormEvent, memo } from 'react';
 import { rating } from '../../../../const';
 import { useParams } from 'react-router-dom';
 import { useAppDispatch } from '../../../../hooks/store';
@@ -7,7 +7,7 @@ import { postCommentAction } from '../../../../store/api-actions';
 const TEXT_MIN_LENGTH = 50;
 const TEXT_MAX_LENGTH = 300;
 
-function ReviewForm(): JSX.Element {
+function ReviewFormComponent(): JSX.Element {
   const { id } = useParams<{ id: string }>();
   const dispatch = useAppDispatch();
 
@@ -120,4 +120,4 @@ function ReviewForm(): JSX.Element {
   );
 }
 
-export { ReviewForm };
+export const ReviewForm = memo(ReviewFormComponent);

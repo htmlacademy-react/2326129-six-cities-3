@@ -1,13 +1,13 @@
 import { Helmet } from 'react-helmet-async';
 import { LocationItems } from './components/location-items/location-items';
-import { OffersSection } from '../offer-page/components/offers-section/offers-section';
+import { OffersSection } from './components/offers-section/offers-section';
 import { Map } from '../../components/map/map';
-import { CITIES } from './const/const';
+import { CITIES, CityName } from './const/const';
 import { useAppDispatch, useAppSelector } from '../../hooks/store';
 import { setCity, setSorting } from '../../store/action';
-import { City } from '../offer-page/types/types';
-import { useState } from 'react';
-import { CITY_LOCATIONS } from '../../const';
+import { City, OfferPreview } from '../offer-page/types/types';
+import { useCallback, useMemo, useState } from 'react';
+import { CITY_LOCATIONS, SortingOption } from '../../const';
 import { EmptyOffersList } from './components/empty-offers-list/main-empty';
 
 function MainPage(): JSX.Element {
@@ -18,21 +18,36 @@ function MainPage(): JSX.Element {
 
   const [activeOfferId, setActiveOfferId] = useState<string | null>(null);
 
-  const currentOffers = offers
-    .filter((offer) => offer.city.name === selectedCity)
-    .sort((a, b) => {
-      switch(sortingOption) {
-        case 'price-low':
-          return a.price - b.price;
-        case 'price-high':
-          return b.price - a.price;
-        case 'top-rated':
-          return b.rating - a.rating;
-        case 'popular':
-        default:
-          return 0;
-      }
-    });
+  const handleCardHover = useCallback((offer?: OfferPreview) => {
+    setActiveOfferId(offer ? offer.id : null);
+  }, []);
+
+  const handleSortChange = useCallback((option: SortingOption) => {
+    dispatch(setSorting(option));
+  }, [dispatch]);
+
+  const handleCityChange = useCallback((city: CityName) => {
+    dispatch(setCity(city));
+  }, [dispatch]);
+
+  const currentOffers = useMemo(
+    () => offers
+      .filter((offer) => offer.city.name === selectedCity)
+      .sort((a, b) => {
+        switch(sortingOption) {
+          case 'price-low':
+            return a.price - b.price;
+          case 'price-high':
+            return b.price - a.price;
+          case 'top-rated':
+            return b.rating - a.rating;
+          case 'popular':
+          default:
+            return 0;
+        }
+      }),
+    [offers, selectedCity, sortingOption]
+  );
 
   const currentCity: City = currentOffers && currentOffers.length > 0
     ? currentOffers[0].city
@@ -52,7 +67,7 @@ function MainPage(): JSX.Element {
             <LocationItems
               cities={CITIES}
               activeCity={selectedCity}
-              onCityChange={(city) => dispatch(setCity(city))}
+              onCityChange={handleCityChange}
             />
           </section>
         </div>
@@ -61,9 +76,9 @@ function MainPage(): JSX.Element {
             <div className="cities__places-container container">
               <OffersSection
                 sortingOption={sortingOption}
-                onSortChange={(option) => dispatch(setSorting(option))}
+                onSortChange={handleSortChange}
                 offers={currentOffers}
-                onCardHover={(offer) => setActiveOfferId(offer ? offer.id : null)}
+                onCardHover={handleCardHover}
               />
               <div className="cities__right-section">
                 <Map className='cities__map' city={currentCity} offers={currentOffers} activeOfferId={activeOfferId}/>

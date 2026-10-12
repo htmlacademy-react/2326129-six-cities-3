@@ -1,6 +1,7 @@
 import { Link } from 'react-router-dom';
 import { AppRoute } from '../../../../const';
 import { CityName } from '../../const/const';
+import { memo } from 'react';
 
 type Locations = {
   cities: readonly CityName[];
@@ -8,7 +9,7 @@ type Locations = {
   onCityChange: (city: CityName) => void;
 };
 
-function LocationItems({ cities, activeCity, onCityChange }: Locations): JSX.Element {
+function LocationItemsComponent({ cities, activeCity, onCityChange }: Locations): JSX.Element {
   return (
     <ul className="locations__list tabs__list">
       {cities.map((city) => (
@@ -33,4 +34,4 @@ function LocationItems({ cities, activeCity, onCityChange }: Locations): JSX.Ele
   );
 }
 
-export { LocationItems };
+export const LocationItems = memo(LocationItemsComponent);

@@ -1,7 +1,8 @@
-import { SortingForm } from '../../../main-page/components/sorting-form/sorting-form';
-import { OfferPreview } from '../../types/types';
+import { SortingForm } from '../sorting-form/sorting-form';
+import { OfferPreview } from '../../../offer-page/types/types';
 import { PlaceCard } from '../../../../components/place-card/place-card';
 import { SortingOption } from '../../../../const';
+import { memo } from 'react';
 
 type OffersSectionProps = {
   offers: OfferPreview[];
@@ -10,7 +11,7 @@ type OffersSectionProps = {
   onSortChange: (option: SortingOption) => void;
 }
 
-function OffersSection({ offers, onCardHover, sortingOption, onSortChange }: OffersSectionProps): JSX.Element {
+function OffersSectionComponent({ offers, onCardHover, sortingOption, onSortChange }: OffersSectionProps): JSX.Element {
 
   return (
     <section className="cities__places places">
@@ -26,8 +27,7 @@ function OffersSection({ offers, onCardHover, sortingOption, onSortChange }: Off
             key={offer.id}
             offer={offer}
             variant='cities'
-            onMouseEnter={() => onCardHover(offer)}
-            onMouseLeave={() => onCardHover()}
+            onCardHover={onCardHover}
           />
         ))}
       </div>
@@ -35,4 +35,4 @@ function OffersSection({ offers, onCardHover, sortingOption, onSortChange }: Off
   );
 }
 
-export { OffersSection };
+export const OffersSection = memo(OffersSectionComponent);

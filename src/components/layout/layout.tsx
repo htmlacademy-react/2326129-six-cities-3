@@ -3,13 +3,11 @@ import { AppRoute, AuthorizationStatus } from '../../const';
 import { getLayoutState } from '../../utils';
 import { useAppDispatch, useAppSelector } from '../../hooks/store';
 import { logoutAction } from '../../store/api-actions';
+import { FavoriteCount } from './components/favorite-count';
 
 function Layout(): JSX.Element {
   const { pathname } = useLocation();
   const dispatch = useAppDispatch();
-  // const offers = useAppSelector((state) => state.offers);
-  const favoriteOffers = useAppSelector((state) => state.favoriteOffers);
-  const favoriteAmount = favoriteOffers.length;
 
   const { rootClassName, logoLinkClassName, shouldRenderUser, shouldRenderFooter } =
     getLayoutState(pathname as AppRoute);
@@ -47,7 +45,7 @@ function Layout(): JSX.Element {
                           <span className="header__user-name user__name">
                             {user?.email}
                           </span>
-                          <span className="header__favorite-count">{favoriteAmount}</span>
+                          <FavoriteCount />
                         </Link>
                       </li>
                       <li className="header__nav-item">

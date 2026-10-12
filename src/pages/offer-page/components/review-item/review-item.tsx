@@ -1,10 +1,11 @@
+import { memo } from 'react';
 import { Review } from '../../types/types';
 
 type ReviewItemProps = {
   review: Review;
 }
 
-export function ReviewItem({ review }: ReviewItemProps): JSX.Element {
+function ReviewItemComponent({ review }: ReviewItemProps): JSX.Element {
   const { date, user, rating, comment } = review;
   return(
     <li className="reviews__item">
@@ -33,3 +34,5 @@ export function ReviewItem({ review }: ReviewItemProps): JSX.Element {
     </li>
   );
 }
+
+export const ReviewItem = memo(ReviewItemComponent);

@@ -87,18 +87,18 @@ const reducer = createReducer(initialState, (builder) => {
     })
     .addCase(updateOfferFavoritesStatus, (state, action) => {
       const updated = action.payload;
-      const offerIndex = state.offers.findIndex((o) => o.id === updated.id);
-      if (offerIndex !== -1) {
-        state.offers[offerIndex] = updated;
+      const offer = state.offers.find((o) => o.id === updated.id);
+      if (offer) {
+        offer.isFavorite = updated.isFavorite;
       }
 
-      const nearbyIndex = state.nearbyOffers.findIndex((o) => o.id === updated.id);
-      if (nearbyIndex !== -1) {
-        state.nearbyOffers[nearbyIndex] = updated;
+      const nearby = state.nearbyOffers.find((o) => o.id === updated.id);
+      if (nearby) {
+        nearby.isFavorite = updated.isFavorite;
       }
 
       if (state.currentOffer && state.currentOffer.id === updated.id) {
-        state.currentOffer = { ...state.currentOffer, ...updated};
+        state.currentOffer.isFavorite = updated.isFavorite;
       }
 
       const favoriteIndex = state.favoriteOffers.findIndex((o) => o.id === updated.id);
