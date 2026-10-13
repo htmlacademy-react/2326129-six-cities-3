@@ -4,22 +4,29 @@ import { OfferPreview } from '../../pages/offer-page/types/types';
 import { AppRoute, AuthorizationStatus } from '../../const';
 import { useAppDispatch, useAppSelector } from '../../hooks/store';
 import { changeFavoriteStatusAction } from '../../store/api-actions';
+import { memo, useCallback } from 'react';
 
 type PlaceCardVariant = 'cities' | 'favorites' | 'nearby';
 
 type PlaceCardProps = {
   offer: OfferPreview;
   variant?: PlaceCardVariant;
-  onMouseEnter?: () => void;
-  onMouseLeave?: () => void;
+  onCardHover?: (offer?: OfferPreview) => void;
 };
 
-function PlaceCard({
+function PlaceCardComponent({
   offer,
   variant = 'cities',
-  onMouseEnter,
-  onMouseLeave,
+  onCardHover,
 }: PlaceCardProps): JSX.Element {
+  const handleMouseEnter = useCallback(() => {
+    onCardHover?.(offer);
+  }, [onCardHover, offer]);
+
+  const handleMouseLeave = useCallback(() => {
+    onCardHover?.();
+  }, [onCardHover]);
+
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
   const authorizationStatus = useAppSelector((state) => state.authorizationStatus);
@@ -64,8 +71,8 @@ function PlaceCard({
   return (
     <article
       className={articleClass}
-      onMouseEnter={onMouseEnter}
-      onMouseLeave={onMouseLeave}
+      onMouseEnter={handleMouseEnter}
+      onMouseLeave={handleMouseLeave}
     >
       {isPremium && (
         <div className="place-card__mark">
@@ -124,4 +131,4 @@ function PlaceCard({
   );
 }
 
-export { PlaceCard };
+export const PlaceCard = memo(PlaceCardComponent);

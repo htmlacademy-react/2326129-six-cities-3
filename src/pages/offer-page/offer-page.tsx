@@ -10,7 +10,7 @@ import { Map } from '../../components/map';
 import { PlaceCard } from '../../components/place-card/place-card';
 import { ReviewList } from './components/review-list/review-list';
 import { useAppDispatch, useAppSelector } from '../../hooks/store';
-import { useEffect } from 'react';
+import { useEffect, useMemo } from 'react';
 import { changeFavoriteStatusAction, fetchCommentsAction, fetchOfferByIdAction, fetchOffersNearbyAction } from '../../store/api-actions';
 import LoadingScreen from '../loading-screen/loading-screen';
 
@@ -31,12 +31,20 @@ function OfferPage(): JSX.Element {
   const currentOffer = useAppSelector((state) => state.currentOffer);
   const isOfferLoading = useAppSelector((state) => state.isOfferLoading);
   const offersNearby = useAppSelector((state) => state.nearbyOffers);
-  const visibleNearby = offersNearby.slice(0, AMOUNT_NEARBY);
+
   const comments = useAppSelector((state) => state.comments);
 
-  const offersForMap = currentOffer
-    ? [currentOffer, ...visibleNearby]
-    : visibleNearby;
+  const visibleNearby = useMemo(
+    () => offersNearby.slice(0, AMOUNT_NEARBY),
+    [offersNearby]
+  );
+
+  const offersForMap = useMemo(
+    () => (currentOffer
+      ? [currentOffer, ...visibleNearby]
+      : visibleNearby),
+    [currentOffer, visibleNearby]
+  );
 
   useEffect(() => {
     if(!id) {

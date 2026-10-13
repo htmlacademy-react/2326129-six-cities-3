@@ -1,3 +1,4 @@
+import { memo } from 'react';
 import { Review } from '../../types/types';
 import { ReviewItem } from '../review-item/review-item';
 
@@ -5,7 +6,7 @@ type ReviewListProps = {
   reviews: Review[];
 }
 
-export function ReviewList({ reviews }: ReviewListProps): JSX.Element {
+function ReviewListComponent({ reviews }: ReviewListProps): JSX.Element {
   return(
     <ul className="reviews__list">
       {reviews.map((review) => (
@@ -14,3 +15,5 @@ export function ReviewList({ reviews }: ReviewListProps): JSX.Element {
     </ul>
   );
 }
+
+export const ReviewList = memo(ReviewListComponent);
