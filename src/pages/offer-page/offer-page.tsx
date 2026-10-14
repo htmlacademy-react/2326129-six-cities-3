@@ -27,12 +27,12 @@ function OfferPage(): JSX.Element {
   const dispatch = useAppDispatch();
   const { id } = useParams();
   const navigate = useNavigate();
-  const authorizationStatus = useAppSelector((state) => state.authorizationStatus);
-  const currentOffer = useAppSelector((state) => state.currentOffer);
-  const isOfferLoading = useAppSelector((state) => state.isOfferLoading);
-  const offersNearby = useAppSelector((state) => state.nearbyOffers);
+  const authorizationStatus = useAppSelector((state) => state.user.authorizationStatus);
+  const currentOffer = useAppSelector((state) => state.offers.currentOffer);
+  const isOfferLoading = useAppSelector((state) => state.offers.isOfferLoading);
+  const offersNearby = useAppSelector((state) => state.offers.nearbyOffers);
 
-  const comments = useAppSelector((state) => state.comments);
+  const comments = useAppSelector((state) => state.offers.comments);
 
   const visibleNearby = useMemo(
     () => offersNearby.slice(0, AMOUNT_NEARBY),

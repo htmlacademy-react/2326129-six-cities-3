@@ -26,8 +26,8 @@ const PageNotFound = lazy(() => import('../../pages/page-not-found/page-not-foun
   .then((module) => ({ default: module.PageNotFound })));
 
 function App(): JSX.Element {
-  const authorizationStatus = useAppSelector((state) => state.authorizationStatus);
-  const isOffersDataLoading = useAppSelector((state) => state.isOffersDataLoading);
+  const authorizationStatus = useAppSelector((state) => state.user.authorizationStatus);
+  const isOffersDataLoading = useAppSelector((state) => state.offers.isOffersDataLoading);
 
   if (
     authorizationStatus === AuthorizationStatus.Unknown ||

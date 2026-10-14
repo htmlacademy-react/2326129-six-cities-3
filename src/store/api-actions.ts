@@ -1,6 +1,6 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
 import { Offer, OfferPreview, Review } from '../pages/offer-page/types/types';
-import { addComment, loadComments, loadFavoriteOffers, loadOffer, loadOffers, loadOffersNearby, requiredAuthorization, setError, setOfferLoading, setOffersDataLoadingStatus, setUser, updateOfferFavoritesStatus } from './action';
+import { addComment, loadComments, loadFavoriteOffers, loadOffer, loadOffers, loadOffersNearby, requiredAuthorization, setError, setOfferLoading, setOffersDataLoadingStatus, setUser, updateOfferFavoritesStatus } from './action.ts';
 import { AppDispatch, State } from '../types/state';
 import { AxiosInstance } from 'axios';
 import { APIRoute, AuthorizationStatus, TIMEOUT_SHOW_ERROR } from '../const';

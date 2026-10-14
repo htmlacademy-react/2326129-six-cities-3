@@ -12,9 +12,9 @@ import { EmptyOffersList } from './components/empty-offers-list/main-empty';
 
 function MainPage(): JSX.Element {
   const dispatch = useAppDispatch();
-  const offers = useAppSelector((state) => state.offers);
-  const selectedCity = useAppSelector((state) => state.city);
-  const sortingOption = useAppSelector((state) => state.sorting);
+  const offers = useAppSelector((state) => state.offers.offers);
+  const selectedCity = useAppSelector((state) => state.app.city);
+  const sortingOption = useAppSelector((state) => state.app.sorting);
 
   const [activeOfferId, setActiveOfferId] = useState<string | null>(null);
 

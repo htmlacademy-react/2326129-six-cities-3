@@ -29,7 +29,7 @@ function PlaceCardComponent({
 
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
-  const authorizationStatus = useAppSelector((state) => state.authorizationStatus);
+  const authorizationStatus = useAppSelector((state) => state.user.authorizationStatus);
   const isAuthorized = authorizationStatus === AuthorizationStatus.Auth;
 
   const { id, title, type, price, rating, previewImage, isFavorite, isPremium } = offer;

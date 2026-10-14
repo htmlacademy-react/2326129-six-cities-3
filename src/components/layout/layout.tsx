@@ -12,8 +12,8 @@ function Layout(): JSX.Element {
   const { rootClassName, logoLinkClassName, shouldRenderUser, shouldRenderFooter } =
     getLayoutState(pathname as AppRoute);
 
-  const authorizationStatus = useAppSelector((state) => state.authorizationStatus);
-  const user = useAppSelector((state) => state.user);
+  const authorizationStatus = useAppSelector((state) => state.user.authorizationStatus);
+  const user = useAppSelector((state) => state.user.user);
   const isAuthorized = authorizationStatus === AuthorizationStatus.Auth;
 
   const handleLogout = (evt: React.MouseEvent<HTMLAnchorElement>) => {

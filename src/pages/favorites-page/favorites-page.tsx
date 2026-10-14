@@ -8,7 +8,7 @@ import { EmptyFavoritesList } from './components/empty-favorites-list/empty-favo
 
 function FavoritesPage(): JSX.Element {
   const dispatch = useAppDispatch();
-  const favoriteOffers = useAppSelector((state) => state.favoriteOffers);
+  const favoriteOffers = useAppSelector((state) => state.offers.favoriteOffers);
 
   useEffect(() => {
     dispatch(loadFavoriteOffersAction());
