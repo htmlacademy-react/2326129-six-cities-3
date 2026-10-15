@@ -13,6 +13,7 @@ import { useAppDispatch, useAppSelector } from '../../hooks/store';
 import { useEffect, useMemo } from 'react';
 import { changeFavoriteStatusAction, fetchCommentsAction, fetchOfferByIdAction, fetchOffersNearbyAction } from '../../store/api-actions';
 import LoadingScreen from '../loading-screen/loading-screen';
+import { selectAuthorizationStatus, selectCurrentOffer, selectIsOfferLoading, selectNearbyOffers, selectComments } from '../../store/selectors';
 
 const AMOUNT_NEARBY = 3;
 
@@ -27,12 +28,11 @@ function OfferPage(): JSX.Element {
   const dispatch = useAppDispatch();
   const { id } = useParams();
   const navigate = useNavigate();
-  const authorizationStatus = useAppSelector((state) => state.user.authorizationStatus);
-  const currentOffer = useAppSelector((state) => state.offers.currentOffer);
-  const isOfferLoading = useAppSelector((state) => state.offers.isOfferLoading);
-  const offersNearby = useAppSelector((state) => state.offers.nearbyOffers);
-
-  const comments = useAppSelector((state) => state.offers.comments);
+  const authorizationStatus = useAppSelector(selectAuthorizationStatus);
+  const currentOffer = useAppSelector(selectCurrentOffer);
+  const isOfferLoading = useAppSelector(selectIsOfferLoading);
+  const offersNearby = useAppSelector(selectNearbyOffers);
+  const comments = useAppSelector(selectComments);
 
   const visibleNearby = useMemo(
     () => offersNearby.slice(0, AMOUNT_NEARBY),

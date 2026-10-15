@@ -9,6 +9,7 @@ import { useAppSelector } from '../../hooks/store';
 import HistoryRouter from '../history-route/history-route';
 import browserHistory from '../../browser-history';
 import LoadingScreen from '../../pages/loading-screen/loading-screen';
+import { selectAuthorizationStatus, selectIsOffersDataLoading } from '../../store/selectors';
 
 const MainPage = lazy(() => import('../../pages/main-page/main-page')
   .then((module) => ({ default: module.MainPage })));
@@ -26,8 +27,8 @@ const PageNotFound = lazy(() => import('../../pages/page-not-found/page-not-foun
   .then((module) => ({ default: module.PageNotFound })));
 
 function App(): JSX.Element {
-  const authorizationStatus = useAppSelector((state) => state.user.authorizationStatus);
-  const isOffersDataLoading = useAppSelector((state) => state.offers.isOffersDataLoading);
+  const authorizationStatus = useAppSelector(selectAuthorizationStatus);
+  const isOffersDataLoading = useAppSelector(selectIsOffersDataLoading);
 
   if (
     authorizationStatus === AuthorizationStatus.Unknown ||

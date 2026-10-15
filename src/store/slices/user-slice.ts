@@ -1,6 +1,7 @@
-import { createSlice, PayloadAction } from '@reduxjs/toolkit';
+import { createSlice } from '@reduxjs/toolkit';
 import { AuthorizationStatus } from '../../const';
 import { UserData } from '../auth-data';
+import { checkAuthAction, loginAction, logoutAction } from '../api-actions';
 
 type UserState = {
   user: UserData | null;
@@ -12,18 +13,29 @@ const initialState: UserState = {
   authorizationStatus: AuthorizationStatus.Unknown
 };
 
-const UserSlice = createSlice({
+const userSlice = createSlice({
   name: 'user',
   initialState: initialState,
-  reducers: {
-    requiredAuthorization: (state, action: PayloadAction<AuthorizationStatus>) => {
-      state.authorizationStatus = action.payload;
-    },
-    setUser: (state, action: PayloadAction<UserData | null>) => {
-      state.user = action.payload;
-    }
+  reducers: {},
+  extraReducers: (builder) => {
+    builder
+      .addCase(checkAuthAction.fulfilled, (state, action) => {
+        state.user = action.payload;
+        state.authorizationStatus = AuthorizationStatus.Auth;
+      })
+      .addCase(checkAuthAction.rejected, (state) => {
+        state.user = null;
+        state.authorizationStatus = AuthorizationStatus.NoAuth;
+      })
+      .addCase(loginAction.fulfilled, (state, action) => {
+        state.user = action.payload;
+        state.authorizationStatus = AuthorizationStatus.Auth;
+      })
+      .addCase(logoutAction.fulfilled, (state) => {
+        state.user = null;
+        state.authorizationStatus = AuthorizationStatus.NoAuth;
+      });
   }
 });
 
-export const { setUser, requiredAuthorization } = UserSlice.actions;
-export const userReducer = UserSlice.reducer;
+export const userReducer = userSlice.reducer;

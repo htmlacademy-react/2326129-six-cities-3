@@ -11,7 +11,7 @@ store.dispatch(fetchOffersAction());
 store.dispatch(checkAuthAction())
   .unwrap()
   .finally(() => {
-    if (store.getState().authorizationStatus === AuthorizationStatus.Auth) {
+    if (store.getState().user.authorizationStatus === AuthorizationStatus.Auth) {
       store.dispatch(loadFavoriteOffersAction());
     }
   });

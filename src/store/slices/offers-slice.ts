@@ -1,5 +1,15 @@
-import { createSlice, PayloadAction } from '@reduxjs/toolkit';
+import { createSlice } from '@reduxjs/toolkit';
 import { Offer, OfferPreview, Review } from '../../pages/offer-page/types/types';
+import {
+  changeFavoriteStatusAction,
+  fetchCommentsAction,
+  fetchOfferByIdAction,
+  fetchOffersAction,
+  fetchOffersNearbyAction,
+  loadFavoriteOffersAction,
+  logoutAction,
+  postCommentAction,
+} from '../api-actions';
 
 type OffersState = {
   offers: OfferPreview[];
@@ -10,7 +20,7 @@ type OffersState = {
   isOffersDataLoading: boolean;
   isOfferLoading: boolean;
   isCommentLoading: boolean;
-}
+};
 
 const initialState: OffersState = {
   offers: [],
@@ -25,75 +35,92 @@ const initialState: OffersState = {
 
 const offersSlice = createSlice({
   name: 'offers',
-  initialState: initialState,
-  reducers: {
-    loadOffers: (state, action: PayloadAction<OfferPreview[]>) => {
-      state.offers = action.payload;
-    },
-    loadOffer: (state, action: PayloadAction<Offer | null>) => {
-      state.currentOffer = action.payload;
-    },
-    loadOffersNearby: (state, action: PayloadAction<OfferPreview[]>) => {
-      state.nearbyOffers = action.payload;
-    },
-    loadComments: (state, action: PayloadAction<Review[]>) => {
-      state.comments = action.payload;
-    },
-    addComment: (state, action: PayloadAction<Review>) => {
-      state.comments.push(action.payload);
-    },
-    setCommentsLoading: (state, action: PayloadAction<boolean>) => {
-      state.isCommentLoading = action.payload;
-    },
-    setOffersDataLoadingStatus: (state, action: PayloadAction<boolean>) => {
-      state.isOffersDataLoading = action.payload;
-    },
-    setOfferLoading: (state, action: PayloadAction<boolean>) => {
-      state.isOfferLoading = action.payload;
-    },
-    loadFavoriteOffers: (state, action: PayloadAction<OfferPreview[]>) => {
-      state.favoriteOffers = action.payload;
-    },
-    updateOfferFavoritesStatus: (state, action: PayloadAction<OfferPreview>) => {
-      const updated = action.payload;
-
-      const offer = state.offers.find((o) => o.id === updated.id);
-      if (offer) {
-        offer.isFavorite = updated.isFavorite;
-      }
-
-      const nearby = state.nearbyOffers.find((o) => o.id === updated.id);
-      if (nearby) {
-        nearby.isFavorite = updated.isFavorite;
-      }
-
-      if (state.currentOffer && state.currentOffer.id === updated.id) {
-        state.currentOffer.isFavorite = updated.isFavorite;
-      }
-
-      const favoriteIndex = state.favoriteOffers.findIndex((o) => o.id === updated.id);
-      if (updated.isFavorite) {
-        if (favoriteIndex === -1) {
-          state.favoriteOffers.push(updated);
+  initialState,
+  reducers: {},
+  extraReducers: (builder) => {
+    builder
+      .addCase(fetchOffersAction.pending, (state) => {
+        state.isOffersDataLoading = true;
+      })
+      .addCase(fetchOffersAction.fulfilled, (state, action) => {
+        state.isOffersDataLoading = false;
+        state.offers = action.payload;
+      })
+      .addCase(fetchOffersAction.rejected, (state) => {
+        state.isOffersDataLoading = false;
+      })
+      .addCase(fetchOfferByIdAction.pending, (state) => {
+        state.isOfferLoading = true;
+      })
+      .addCase(fetchOfferByIdAction.fulfilled, (state, action) => {
+        state.isOfferLoading = false;
+        state.currentOffer = action.payload;
+      })
+      .addCase(fetchOfferByIdAction.rejected, (state) => {
+        state.isOfferLoading = false;
+        state.currentOffer = null;
+      })
+      .addCase(fetchOffersNearbyAction.fulfilled, (state, action) => {
+        state.nearbyOffers = action.payload;
+      })
+      .addCase(fetchOffersNearbyAction.rejected, (state) => {
+        state.nearbyOffers = [];
+      })
+      .addCase(fetchCommentsAction.pending, (state) => {
+        state.isCommentLoading = true;
+      })
+      .addCase(fetchCommentsAction.fulfilled, (state, action) => {
+        state.isCommentLoading = false;
+        state.comments = action.payload;
+      })
+      .addCase(fetchCommentsAction.rejected, (state) => {
+        state.isCommentLoading = false;
+        state.comments = [];
+      })
+      .addCase(postCommentAction.fulfilled, (state, action) => {
+        state.comments.push(action.payload);
+      })
+      .addCase(loadFavoriteOffersAction.fulfilled, (state, action) => {
+        state.favoriteOffers = action.payload;
+      })
+      .addCase(loadFavoriteOffersAction.rejected, (state) => {
+        state.favoriteOffers = [];
+      })
+      .addCase(changeFavoriteStatusAction.fulfilled, (state, action) => {
+        const updated = action.payload;
+        const offer = state.offers.find((o) => o.id === updated.id);
+        if (offer) {
+          offer.isFavorite = updated.isFavorite;
         }
-      } else if (favoriteIndex !== -1) {
-        state.favoriteOffers.splice(favoriteIndex, 1);
-      }
-    },
+        const nearby = state.nearbyOffers.find((o) => o.id === updated.id);
+        if (nearby) {
+          nearby.isFavorite = updated.isFavorite;
+        }
+        if (state.currentOffer && state.currentOffer.id === updated.id) {
+          state.currentOffer.isFavorite = updated.isFavorite;
+        }
+        const favIndex = state.favoriteOffers.findIndex((o) => o.id === updated.id);
+        if (updated.isFavorite) {
+          if (favIndex === -1) {
+            state.favoriteOffers.push(updated);
+          }
+        } else if (favIndex !== -1) {
+          state.favoriteOffers.splice(favIndex, 1);
+        }
+      })
+      .addCase(logoutAction.fulfilled, (state) => {
+        state.favoriteOffers = [];
+        state.offers.forEach((offer) => {
+          offer.isFavorite = false;
+        });
+        state.nearbyOffers.forEach((offer) => {
+          offer.isFavorite = false;
+        });
+        if(state.currentOffer) {
+          state.currentOffer.isFavorite = false;
+        }
+      });
   },
 });
-
-export const {
-  loadOffers,
-  loadOffer,
-  loadOffersNearby,
-  loadComments,
-  addComment,
-  setCommentsLoading,
-  setOffersDataLoadingStatus,
-  setOfferLoading,
-  loadFavoriteOffers,
-  updateOfferFavoritesStatus,
-} = offersSlice.actions;
 
 export const offersReducer = offersSlice.reducer;

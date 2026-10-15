@@ -4,17 +4,18 @@ import { OffersSection } from './components/offers-section/offers-section';
 import { Map } from '../../components/map/map';
 import { CITIES, CityName } from './const/const';
 import { useAppDispatch, useAppSelector } from '../../hooks/store';
-import { setCity, setSorting } from '../../store/action';
 import { City, OfferPreview } from '../offer-page/types/types';
 import { useCallback, useMemo, useState } from 'react';
 import { CITY_LOCATIONS, SortingOption } from '../../const';
 import { EmptyOffersList } from './components/empty-offers-list/main-empty';
+import { selectCity, selectOffers, selectSorting } from '../../store/selectors';
+import { setCity, setSorting } from '../../store/slices/app-slice';
 
 function MainPage(): JSX.Element {
   const dispatch = useAppDispatch();
-  const offers = useAppSelector((state) => state.offers.offers);
-  const selectedCity = useAppSelector((state) => state.app.city);
-  const sortingOption = useAppSelector((state) => state.app.sorting);
+  const offers = useAppSelector(selectOffers);
+  const selectedCity = useAppSelector(selectCity);
+  const sortingOption = useAppSelector(selectSorting);
 
   const [activeOfferId, setActiveOfferId] = useState<string | null>(null);
 

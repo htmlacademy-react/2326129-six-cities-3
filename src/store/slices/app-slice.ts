@@ -6,12 +6,12 @@ type AppState = {
   city: CityName;
   sorting: SortingOption;
   error: string | null;
-}
+};
 
 const initialState: AppState = {
   city: 'Paris',
   sorting: 'popular',
-  error: null
+  error: null,
 };
 
 const appSlice = createSlice({

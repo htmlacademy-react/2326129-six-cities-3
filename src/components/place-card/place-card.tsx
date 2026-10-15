@@ -5,6 +5,7 @@ import { AppRoute, AuthorizationStatus } from '../../const';
 import { useAppDispatch, useAppSelector } from '../../hooks/store';
 import { changeFavoriteStatusAction } from '../../store/api-actions';
 import { memo, useCallback } from 'react';
+import { selectAuthorizationStatus } from '../../store/selectors';
 
 type PlaceCardVariant = 'cities' | 'favorites' | 'nearby';
 
@@ -29,7 +30,7 @@ function PlaceCardComponent({
 
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
-  const authorizationStatus = useAppSelector((state) => state.user.authorizationStatus);
+  const authorizationStatus = useAppSelector(selectAuthorizationStatus);
   const isAuthorized = authorizationStatus === AuthorizationStatus.Auth;
 
   const { id, title, type, price, rating, previewImage, isFavorite, isPremium } = offer;
