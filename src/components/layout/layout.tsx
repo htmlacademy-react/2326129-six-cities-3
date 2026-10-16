@@ -4,6 +4,7 @@ import { getLayoutState } from '../../utils';
 import { useAppDispatch, useAppSelector } from '../../hooks/store';
 import { logoutAction } from '../../store/api-actions';
 import { FavoriteCount } from './components/favorite-count';
+import { selectAuthorizationStatus, selectUser } from '../../store/selectors';
 
 function Layout(): JSX.Element {
   const { pathname } = useLocation();
@@ -12,8 +13,8 @@ function Layout(): JSX.Element {
   const { rootClassName, logoLinkClassName, shouldRenderUser, shouldRenderFooter } =
     getLayoutState(pathname as AppRoute);
 
-  const authorizationStatus = useAppSelector((state) => state.authorizationStatus);
-  const user = useAppSelector((state) => state.user);
+  const authorizationStatus = useAppSelector(selectAuthorizationStatus);
+  const user = useAppSelector(selectUser);
   const isAuthorized = authorizationStatus === AuthorizationStatus.Auth;
 
   const handleLogout = (evt: React.MouseEvent<HTMLAnchorElement>) => {

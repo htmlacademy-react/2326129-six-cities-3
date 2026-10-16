@@ -5,10 +5,11 @@ import { useAppDispatch, useAppSelector } from '../../hooks/store';
 import { useEffect } from 'react';
 import { loadFavoriteOffersAction } from '../../store/api-actions';
 import { EmptyFavoritesList } from './components/empty-favorites-list/empty-favorites-list';
+import { selectFavoriteOffers } from '../../store/selectors';
 
 function FavoritesPage(): JSX.Element {
   const dispatch = useAppDispatch();
-  const favoriteOffers = useAppSelector((state) => state.favoriteOffers);
+  const favoriteOffers = useAppSelector(selectFavoriteOffers);
 
   useEffect(() => {
     dispatch(loadFavoriteOffersAction());
