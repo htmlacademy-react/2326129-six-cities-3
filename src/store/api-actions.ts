@@ -3,7 +3,7 @@ import { Offer, OfferPreview, Review } from '../pages/offer-page/types/types';
 import { AppDispatch } from '../types/state';
 import { AxiosInstance } from 'axios';
 import { APIRoute, TIMEOUT_SHOW_ERROR } from '../const';
-import { AuthData, UserData } from './auth-data';
+import { AuthData, UserData } from '../types/user';
 import { dropToken, saveToken } from '../services/token';
 import { setError } from './slices/app-slice';
 
