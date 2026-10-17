@@ -1,4 +1,3 @@
-// src/components/place-card/place-card.tsx
 import { Link, useNavigate } from 'react-router-dom';
 import { OfferPreview } from '../../pages/offer-page/types/types';
 import { AppRoute, AuthorizationStatus } from '../../const';

@@ -16,9 +16,10 @@ function OffersSectionComponent({ offers, onCardHover, sortingOption, onSortChan
   return (
     <section className="cities__places places">
       <h2 className="visually-hidden">Places</h2>
-      <b className="places__found">{offers && offers.length > 0
-        ? `${offers.length} place${offers.length > 1 && 's'} to stay in ${offers[0].city.name}`
-        : 'No places to stay'}
+      <b className="places__found">
+        {offers.length > 0
+          ? `${offers.length} ${offers.length === 1 ? 'place' : 'places'} to stay in ${offers[0].city.name}`
+          : 'No places to stay'}
       </b>
       < SortingForm sortingOption={sortingOption} onSortChange={onSortChange} />
       <div className="cities__places-list places__list tabs__content">
