@@ -1,6 +1,6 @@
 import { render, screen } from '@testing-library/react';
 import { Provider } from 'react-redux';
-import { EmptyOffersList } from './main-empty';
+import { EmptyOffersList } from './empty-offers-list';
 import { createTestStore } from '../../../../utils/mock-store';
 
 describe('EmptyOffersList', () => {

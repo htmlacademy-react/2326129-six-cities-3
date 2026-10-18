@@ -1,4 +1,4 @@
-import { offersReducer } from './offers-slice';
+import { offersReducer, disableFavorites } from './offers-slice';
 import {
   createMockOffer,
   createMockOfferPreview,
@@ -11,7 +11,6 @@ import {
   fetchOffersAction,
   fetchOffersNearbyAction,
   loadFavoriteOffersAction,
-  logoutAction,
   postCommentAction,
 } from '../api-actions';
 
@@ -170,7 +169,7 @@ describe('offersSlice', () => {
       nearbyOffers: [offer],
       favoriteOffers: [offer],
     };
-    const result = offersReducer(state, { type: logoutAction.fulfilled.type });
+    const result = offersReducer(state, disableFavorites());
 
     expect(result.favoriteOffers).toHaveLength(0);
     expect(result.offers[0].isFavorite).toBe(false);

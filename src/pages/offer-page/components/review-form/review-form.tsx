@@ -1,8 +1,9 @@
 import { useState, Fragment, ChangeEvent, FormEvent, memo } from 'react';
-import { rating } from '../../../../const';
+import { RATINGS } from '../../../../const';
 import { useParams } from 'react-router-dom';
 import { useAppDispatch } from '../../../../hooks/store';
 import { postCommentAction } from '../../../../store/api-actions';
+import { setError } from '../../../../store/slices/app-slice';
 
 const TEXT_MIN_LENGTH = 50;
 const TEXT_MAX_LENGTH = 300;
@@ -42,8 +43,11 @@ function ReviewFormComponent(): JSX.Element {
     }))
       .unwrap()
       .then(() => setForm({ rating: 0, comment: '' }))
-      // eslint-disable-next-line no-console
-      .catch((error) => console.error(error))
+      .catch((error) => {
+        dispatch(setError('Failed to submit review. Please try again.'));
+        // eslint-disable-next-line no-console
+        console.error(error);
+      })
       .finally(() => setIsSubmitting(false));
   };
 
@@ -65,7 +69,7 @@ function ReviewFormComponent(): JSX.Element {
       </label>
 
       <div className="reviews__rating-form form__rating">
-        {rating.map(({ value, label }) => (
+        {RATINGS.map(({ value, label }) => (
           <Fragment key={value}>
             <input
               className="form__rating-input visually-hidden"

@@ -126,7 +126,7 @@ function OfferPage(): JSX.Element {
               </div>
               <div className="offer__rating rating">
                 <div className="offer__stars rating__stars">
-                  <span style={{ width: `${rating / 5 * 100}%` }}></span>
+                  <span style={{ width: `${Math.round(rating) / 5 * 100}%` }}></span>
                   <span className="visually-hidden">Rating</span>
                 </div>
                 <span className="offer__rating-value rating__value">{rating}</span>
@@ -148,7 +148,7 @@ function OfferPage(): JSX.Element {
               </div>
               <div className="offer__inside">
                 <h2 className="offer__inside-title">What&apos;s inside</h2>
-                <OfferItems />
+                <OfferItems goods={currentOffer.goods} />
               </div>
               <div className="offer__host">
                 <h2 className="offer__host-title">Meet the host</h2>

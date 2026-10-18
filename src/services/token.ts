@@ -1,5 +1,7 @@
 const AUTH_TOKEN_KEY_NAME = 'six-cities-token';
 
+export const TOKEN_HEADER_NAME = 'x-token';
+
 export type Token = string;
 
 export const getToken = (): Token => {

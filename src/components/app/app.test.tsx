@@ -64,7 +64,7 @@ it('should render OfferPage at "/offer/:id"', async () => {
 describe('App routing', () => {
   it('should render MainPage at "/"', async () => {
     renderApp({ route: '/' });
-    expect(await screen.findByText(/places to stay/i)).toBeInTheDocument();
+    expect(await screen.findByText(/places? to stay/i)).toBeInTheDocument();
   });
 
   it('should render LoginPage at "/login" for unauthenticated user', async () => {
@@ -74,7 +74,7 @@ describe('App routing', () => {
 
   it('should redirect authenticated user from "/login" to "/"', async () => {
     renderApp({ route: '/login', authStatus: AuthorizationStatus.Auth });
-    expect(await screen.findByText(/places to stay/i)).toBeInTheDocument();
+    expect(await screen.findByText(/places? to stay/i)).toBeInTheDocument();
   });
 
   it('should redirect unauthenticated from "/favorites" to "/login"', async () => {

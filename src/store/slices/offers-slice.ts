@@ -7,7 +7,6 @@ import {
   fetchOffersAction,
   fetchOffersNearbyAction,
   loadFavoriteOffersAction,
-  logoutAction,
   postCommentAction,
 } from '../api-actions';
 
@@ -36,7 +35,20 @@ const initialState: OffersState = {
 const offersSlice = createSlice({
   name: 'offers',
   initialState,
-  reducers: {},
+  reducers: {
+    disableFavorites: (state) => {
+      state.favoriteOffers = [];
+      state.offers.forEach((offer) => {
+        offer.isFavorite = false;
+      });
+      state.nearbyOffers.forEach((offer) => {
+        offer.isFavorite = false;
+      });
+      if(state.currentOffer) {
+        state.currentOffer.isFavorite = false;
+      }
+    },
+  },
   extraReducers: (builder) => {
     builder
       .addCase(fetchOffersAction.pending, (state) => {
@@ -107,20 +119,9 @@ const offersSlice = createSlice({
         } else if (favIndex !== -1) {
           state.favoriteOffers.splice(favIndex, 1);
         }
-      })
-      .addCase(logoutAction.fulfilled, (state) => {
-        state.favoriteOffers = [];
-        state.offers.forEach((offer) => {
-          offer.isFavorite = false;
-        });
-        state.nearbyOffers.forEach((offer) => {
-          offer.isFavorite = false;
-        });
-        if(state.currentOffer) {
-          state.currentOffer.isFavorite = false;
-        }
       });
   },
 });
 
+export const { disableFavorites } = offersSlice.actions;
 export const offersReducer = offersSlice.reducer;

@@ -33,7 +33,8 @@ function PlaceCardComponent({
   const isAuthorized = authorizationStatus === AuthorizationStatus.Auth;
 
   const { id, title, type, price, rating, previewImage, isFavorite, isPremium } = offer;
-  const starRating = (rating / 5) * 100;
+  const roundRating = Math.round(rating);
+  const starWidth = (roundRating / 5) * 100;
   const placeType = type.charAt(0).toUpperCase() + type.slice(1);
 
   const isFavorites = variant === 'favorites';
@@ -116,7 +117,7 @@ function PlaceCardComponent({
 
         <div className="place-card__rating rating">
           <div className="place-card__stars rating__stars">
-            <span style={{ width: `${starRating}%` }} />
+            <span style={{ width: `${starWidth}%` }} />
             <span className="visually-hidden">Rating</span>
           </div>
         </div>
