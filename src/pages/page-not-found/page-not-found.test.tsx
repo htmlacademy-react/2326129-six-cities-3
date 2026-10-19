@@ -30,4 +30,10 @@ describe('PageNotFound', () => {
     renderPage('page');
     expect(screen.getByRole('link', { name: /go to main page/i })).toHaveAttribute('href', '/');
   });
+
+  it('should have link to root', () => {
+    renderPage('page');
+    const link = screen.getByRole('link', { name: /go to main page/i });
+    expect(link).toHaveAttribute('href', '/');
+  });
 });
