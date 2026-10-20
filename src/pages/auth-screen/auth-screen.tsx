@@ -4,7 +4,6 @@ import { useAppDispatch } from '../../hooks/store';
 import { Link, useNavigate } from 'react-router-dom';
 import { AppRoute } from '../../const';
 import { Helmet } from 'react-helmet-async';
-// import { AuthData } from '../../store/auth-data';
 
 function AuthScreen(): JSX.Element {
   const loginRef = useRef<HTMLInputElement | null>(null);
@@ -12,10 +11,6 @@ function AuthScreen(): JSX.Element {
 
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
-
-  // const onSubmit = (authData: AuthData) => {
-  //   dispatch(loginAction(authData));
-  // };
 
   const handleSubmit = (evt: FormEvent<HTMLFormElement>) => {
     evt.preventDefault();

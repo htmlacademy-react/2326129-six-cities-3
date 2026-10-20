@@ -5,6 +5,7 @@ import { useAppDispatch, useAppSelector } from '../../hooks/store';
 import { logoutAction } from '../../store/api-actions';
 import { FavoriteCount } from './components/favorite-count';
 import { selectAuthorizationStatus, selectUser } from '../../store/selectors';
+import { disableFavorites } from '../../store/slices/offers-slice';
 
 function Layout(): JSX.Element {
   const { pathname } = useLocation();
@@ -19,6 +20,7 @@ function Layout(): JSX.Element {
 
   const handleLogout = (evt: React.MouseEvent<HTMLAnchorElement>) => {
     evt.preventDefault();
+    dispatch(disableFavorites());
     dispatch(logoutAction());
   };
 

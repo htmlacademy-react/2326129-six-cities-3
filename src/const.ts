@@ -15,7 +15,7 @@ export enum AppRoute {
   Offer = '/offer/:id'
 }
 
-export const rating = [
+export const RATINGS = [
   {value: 5, label: 'perferct'},
   {value: 4, label: 'good'},
   {value: 3, label: 'not bad'},

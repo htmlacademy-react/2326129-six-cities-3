@@ -1,15 +1,22 @@
-import { FormEvent, useRef } from 'react';
+import { FormEvent, useMemo, useRef } from 'react';
 import { Helmet } from 'react-helmet-async';
 import { Link } from 'react-router-dom';
 import { AppRoute } from '../../const';
 import { loginAction } from '../../store/api-actions';
 import { useAppDispatch } from '../../hooks/store';
+import { CITIES } from '../main-page/const/const';
+import { setCity } from '../../store/slices/app-slice';
 
 function LoginPage(): JSX.Element {
   const loginRef = useRef<HTMLInputElement | null>(null);
   const passwordRef = useRef<HTMLInputElement | null>(null);
 
   const dispatch = useAppDispatch();
+
+  const randomCity = useMemo(
+    () => CITIES[Math.floor(Math.random() * CITIES.length)],
+    []
+  );
 
   const handleSubmit = (evt: FormEvent<HTMLFormElement>) => {
     evt.preventDefault();
@@ -20,6 +27,10 @@ function LoginPage(): JSX.Element {
         password: passwordRef.current.value,
       }));
     }
+  };
+
+  const handleCityClick = () => {
+    dispatch(setCity(randomCity));
   };
 
   return (
@@ -56,6 +67,7 @@ function LoginPage(): JSX.Element {
                   type="password"
                   name="password"
                   placeholder="Password"
+                  pattern="(?=.*[A-Za-z])(?=.*\d).+"
                   required
                 />
               </div>
@@ -69,8 +81,8 @@ function LoginPage(): JSX.Element {
           </section>
           <section className="locations locations--login locations--current">
             <div className="locations__item">
-              <Link className="locations__item-link" to={AppRoute.Root}>
-                <span>Amsterdam</span>
+              <Link className="locations__item-link" to={AppRoute.Root} onClick={handleCityClick}>
+                <span>{randomCity}</span>
               </Link>
             </div>
           </section>

@@ -7,7 +7,7 @@ import { useAppDispatch, useAppSelector } from '../../hooks/store';
 import { City, OfferPreview } from '../offer-page/types/types';
 import { useCallback, useMemo, useState } from 'react';
 import { CITY_LOCATIONS, SortingOption } from '../../const';
-import { EmptyOffersList } from './components/empty-offers-list/main-empty';
+import { EmptyOffersList } from './components/empty-offers-list/empty-offers-list';
 import { selectCity, selectOffers, selectSorting } from '../../store/selectors';
 import { setCity, setSorting } from '../../store/slices/app-slice';
 
@@ -50,7 +50,7 @@ function MainPage(): JSX.Element {
     [offers, selectedCity, sortingOption]
   );
 
-  const currentCity: City = currentOffers && currentOffers.length > 0
+  const currentCity: City = currentOffers.length > 0
     ? currentOffers[0].city
     : {
       name: selectedCity,
@@ -61,7 +61,7 @@ function MainPage(): JSX.Element {
       <Helmet>
         <title>6 cities</title>
       </Helmet>
-      <main className="page__main page__main--index">
+      <main className={`page__main page__main--index ${currentOffers.length === 0 ? 'page__main--index-empty' : ''}`}>
         <h1 className="visually-hidden">Cities</h1>
         <div className="tabs">
           <section className="locations container">
@@ -73,7 +73,7 @@ function MainPage(): JSX.Element {
           </section>
         </div>
         <div className="cities">
-          {offers && offers.length > 0 ? (
+          {currentOffers.length > 0 ? (
             <div className="cities__places-container container">
               <OffersSection
                 sortingOption={sortingOption}
@@ -85,8 +85,9 @@ function MainPage(): JSX.Element {
                 <Map className='cities__map' city={currentCity} offers={currentOffers} activeOfferId={activeOfferId}/>
               </div>
             </div>
-          ) :
-            <EmptyOffersList />}
+          ) : (
+            <EmptyOffersList />
+          )}
         </div>
       </main>
     </div>

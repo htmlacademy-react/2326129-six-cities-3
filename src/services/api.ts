@@ -1,5 +1,5 @@
 import axios, { AxiosError, AxiosInstance, AxiosResponse, InternalAxiosRequestConfig } from 'axios';
-import { getToken } from './token';
+import { getToken, TOKEN_HEADER_NAME } from './token';
 import { StatusCodes } from 'http-status-codes';
 import { processErrorHandle } from './process-error-handle';
 
@@ -29,7 +29,7 @@ export const createAPI = (): AxiosInstance => {
     (config: InternalAxiosRequestConfig) => {
       const token = getToken();
       if(token && config.headers) {
-        config.headers['x-token'] = token;
+        config.headers[TOKEN_HEADER_NAME] = token;
       }
       return config;
     },

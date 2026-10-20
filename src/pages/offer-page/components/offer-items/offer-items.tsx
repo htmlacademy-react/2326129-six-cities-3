@@ -1,11 +1,13 @@
 import { memo } from 'react';
 
-const offerItems = [ 'Wi-Fi', 'Washing machine', 'Towels', 'Heating', 'Coffee machine', 'Baby seat', 'Kitchen', 'Dishwasher', 'Cabel TV', 'Fridge' ];
+type OfferItemsProps = {
+  goods: string[];
+}
 
-function OfferItemsComponent(): JSX.Element {
+function OfferItemsComponent({ goods }: OfferItemsProps): JSX.Element {
   return (
     <ul className="offer__inside-list">
-      {offerItems && offerItems.length > 0 && offerItems.map((item) => (
+      {goods && goods.length > 0 && goods.map((item) => (
         <li key={item} className="offer__inside-item">
           {item}
         </li>
