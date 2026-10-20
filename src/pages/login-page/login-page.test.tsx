@@ -6,6 +6,7 @@ import { HelmetProvider } from 'react-helmet-async';
 import { vi } from 'vitest';
 import { LoginPage } from './login-page';
 import { createTestStore } from '../../utils/mock-store';
+import { CITIES } from '../main-page/const/const';
 
 const renderLoginPage = (store = createTestStore()) =>
   render(
@@ -44,9 +45,8 @@ describe('LoginPage', () => {
 
   it('should render random city link', () => {
     renderLoginPage();
-    const cityLink = screen.getByRole('link', {
-      name: /Paris|Cologne|Brussels|Amsterdam|Hamburg|Dusseldorf/i,
-    });
+    const cityPattern = new RegExp(`^(${CITIES.join('|')})$`, 'i');
+    const cityLink = screen.getByRole('link', { name: cityPattern });
     expect(cityLink).toBeInTheDocument();
   });
 });

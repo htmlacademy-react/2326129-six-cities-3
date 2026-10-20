@@ -18,3 +18,4 @@ export const selectIsOfferLoading = (state: State) => state.offers.isOfferLoadin
 export const selectIsCommentLoading = (state: State) => state.offers.isCommentLoading;
 export const selectIsAuthorized = (state: State) =>
   state.user.authorizationStatus === AuthorizationStatus.Auth;
+export const selectFavoriteCount = (state: State) => state.offers.favoriteOffers.length;

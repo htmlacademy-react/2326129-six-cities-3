@@ -3,7 +3,7 @@ import { AppRoute, AuthorizationStatus } from '../../const';
 import { getLayoutState } from '../../utils';
 import { useAppDispatch, useAppSelector } from '../../hooks/store';
 import { logoutAction } from '../../store/api-actions';
-import { FavoriteCount } from './components/favorite-count';
+import { FavoriteCount } from './components/favorite-count/favorite-count';
 import { selectAuthorizationStatus, selectUser } from '../../store/selectors';
 import { disableFavorites } from '../../store/slices/offers-slice';
 

@@ -94,6 +94,19 @@ const offersSlice = createSlice({
       })
       .addCase(loadFavoriteOffersAction.fulfilled, (state, action) => {
         state.favoriteOffers = action.payload;
+        const favoriteIds = new Set(action.payload.map((offer) => offer.id));
+
+        state.offers.forEach((offer) => {
+          offer.isFavorite = favoriteIds.has(offer.id);
+        });
+
+        state.nearbyOffers.forEach((offer) => {
+          offer.isFavorite = favoriteIds.has(offer.id);
+        });
+
+        if(state.currentOffer) {
+          state.currentOffer.isFavorite = favoriteIds.has(state.currentOffer.id);
+        }
       })
       .addCase(loadFavoriteOffersAction.rejected, (state) => {
         state.favoriteOffers = [];
