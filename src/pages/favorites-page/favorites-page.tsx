@@ -40,7 +40,7 @@ function FavoritesPage(): JSX.Element {
             <section className="favorites">
               <h1 className="favorites__title">Saved listing</h1>
               <ul className="favorites__list">
-                {cityGroups && cityGroups.length > 0 && cityGroups.map(([city, cityOffers]) => (
+                {cityGroups.map(([city, cityOffers]) => (
                   <FavoritesList key={city} city={city} offers={cityOffers} />
                 ))}
               </ul>

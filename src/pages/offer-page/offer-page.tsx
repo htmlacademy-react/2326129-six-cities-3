@@ -18,9 +18,6 @@ import { selectAuthorizationStatus, selectCurrentOffer, selectIsOfferLoading, se
 const AMOUNT_NEARBY = 3;
 
 function capitalizeFirstLetterType(str: ApartmentType): string {
-  if (!str) {
-    return '';
-  }
   return str.charAt(0).toUpperCase() + str.slice(1);
 }
 
@@ -171,7 +168,7 @@ function OfferPage(): JSX.Element {
               </div>
               <section className="offer__reviews reviews">
                 <h2 className="reviews__title">Reviews &middot; <span className="reviews__amount">{comments.length}</span></h2>
-                {comments && comments.length > 0 && <ReviewList reviews={comments} />}
+                {comments.length > 0 && <ReviewList reviews={comments} />}
                 {authorizationStatus === AuthorizationStatus.Auth && (
                   <ReviewForm />
                 )}
