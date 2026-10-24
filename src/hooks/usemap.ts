@@ -21,6 +21,8 @@ export const useMap = ({ location, containerRef }: UseMapProps) : LeafletMap | n
   const isRenderedRef = useRef(false);
 
   useEffect(() => {
+    let isMounted = true;
+
     if (containerRef.current !== null && !isRenderedRef.current) {
       const instance = leaflet.map(containerRef.current, {
         center: {
@@ -38,10 +40,14 @@ export const useMap = ({ location, containerRef }: UseMapProps) : LeafletMap | n
           })
         .addTo(instance);
 
-      setMap(instance);
-      isRenderedRef.current = true;
+
+      if (isMounted) {
+        setMap(instance);
+        isRenderedRef.current = true;
+      }
 
       return () => {
+        isMounted = false;
         instance.remove();
         isRenderedRef.current = false;
         setMap(null);

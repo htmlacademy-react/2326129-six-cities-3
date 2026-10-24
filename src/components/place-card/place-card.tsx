@@ -5,6 +5,16 @@ import { useAppDispatch, useAppSelector } from '../../hooks/store';
 import { changeFavoriteStatusAction } from '../../store/api-actions';
 import { memo, useCallback } from 'react';
 import { selectAuthorizationStatus } from '../../store/selectors';
+import {
+  DEFAULT_IMAGE_WIDTH,
+  DEFAULT_IMAGE_HEIGHT,
+  FAVORITES_IMAGE_WIDTH,
+  FAVORITES_IMAGE_HEIGHT,
+  BOOKMARK_ICON_WIDTH,
+  BOOKMARK_ICON_HEIGHT,
+  MAX_RATING,
+  RATING_PERCENT_MAX,
+} from './const';
 
 type PlaceCardVariant = 'cities' | 'favorites' | 'nearby';
 
@@ -34,14 +44,14 @@ function PlaceCardComponent({
 
   const { id, title, type, price, rating, previewImage, isFavorite, isPremium } = offer;
   const roundRating = Math.round(rating);
-  const starWidth = (roundRating / 5) * 100;
+  const starWidth = (roundRating / MAX_RATING) * RATING_PERCENT_MAX;
   const placeType = type.charAt(0).toUpperCase() + type.slice(1);
 
   const isFavorites = variant === 'favorites';
   const isNearby = variant === 'nearby';
 
-  const imageWidth = isFavorites ? 150 : 260;
-  const imageHeight = isFavorites ? 110 : 200;
+  const imageWidth = isFavorites ? FAVORITES_IMAGE_WIDTH : DEFAULT_IMAGE_WIDTH;
+  const imageHeight = isFavorites ? FAVORITES_IMAGE_HEIGHT : DEFAULT_IMAGE_HEIGHT;
 
   const handleBookmark = (evt: React.MouseEvent<HTMLButtonElement>) => {
     evt.preventDefault();
@@ -106,7 +116,11 @@ function PlaceCardComponent({
             type="button"
             onClick={handleBookmark}
           >
-            <svg className="place-card__bookmark-icon" width="18" height="19">
+            <svg
+              className="place-card__bookmark-icon"
+              width={BOOKMARK_ICON_WIDTH}
+              height={BOOKMARK_ICON_HEIGHT}
+            >
               <use xlinkHref="#icon-bookmark" />
             </svg>
             <span className="visually-hidden">

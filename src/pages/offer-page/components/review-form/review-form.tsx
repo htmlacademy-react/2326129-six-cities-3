@@ -3,7 +3,7 @@ import { RATINGS } from '../../../../const';
 import { useParams } from 'react-router-dom';
 import { useAppDispatch } from '../../../../hooks/store';
 import { postCommentAction } from '../../../../store/api-actions';
-import { setError } from '../../../../store/slices/app-slice';
+import { errorNotification } from '../../../../store/slices/app-slice';
 
 const TEXT_MIN_LENGTH = 50;
 const TEXT_MAX_LENGTH = 300;
@@ -44,7 +44,7 @@ function ReviewFormComponent(): JSX.Element {
       .unwrap()
       .then(() => setForm({ rating: 0, comment: '' }))
       .catch((error) => {
-        dispatch(setError('Failed to submit review. Please try again.'));
+        dispatch(errorNotification('Failed to submit review. Please try again.'));
         // eslint-disable-next-line no-console
         console.error(error);
       })

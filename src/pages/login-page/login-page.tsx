@@ -5,7 +5,7 @@ import { AppRoute } from '../../const';
 import { loginAction } from '../../store/api-actions';
 import { useAppDispatch } from '../../hooks/store';
 import { CITIES } from '../main-page/const/const';
-import { setCity } from '../../store/slices/app-slice';
+import { citySelection } from '../../store/slices/app-slice';
 
 function LoginPage(): JSX.Element {
   const loginRef = useRef<HTMLInputElement | null>(null);
@@ -30,7 +30,7 @@ function LoginPage(): JSX.Element {
   };
 
   const handleCityClick = () => {
-    dispatch(setCity(randomCity));
+    dispatch(citySelection(randomCity));
   };
 
   return (
