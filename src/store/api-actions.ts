@@ -5,7 +5,7 @@ import { AxiosInstance } from 'axios';
 import { APIRoute, TIMEOUT_SHOW_ERROR } from '../const';
 import { AuthData, UserData } from '../types/user';
 import { dropToken, saveToken } from '../services/token';
-import { setError } from './slices/app-slice';
+import { errorNotification } from './slices/app-slice';
 
 export const clearErrorAction = createAsyncThunk<
   void,
@@ -14,7 +14,7 @@ export const clearErrorAction = createAsyncThunk<
 >(
   'app/clearError',
   (_arg, { dispatch }) => {
-    setTimeout(() => dispatch(setError(null)), TIMEOUT_SHOW_ERROR);
+    setTimeout(() => dispatch(errorNotification(null)), TIMEOUT_SHOW_ERROR);
   },
 );
 

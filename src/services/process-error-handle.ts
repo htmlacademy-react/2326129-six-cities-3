@@ -1,8 +1,8 @@
 import { store } from '../store';
 import { clearErrorAction } from '../store/api-actions';
-import { setError } from '../store/slices/app-slice';
+import { errorNotification } from '../store/slices/app-slice';
 
 export const processErrorHandle = (message: string): void => {
-  store.dispatch(setError(message));
+  store.dispatch(errorNotification(message));
   store.dispatch(clearErrorAction());
 };

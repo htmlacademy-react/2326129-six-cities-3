@@ -2,7 +2,7 @@ import { Link } from 'react-router-dom';
 import { OfferPreview } from '../../../offer-page/types/types';
 import { PlaceCard } from '../../../../components/place-card/place-card';
 import { CityName } from '../../../main-page/const/const';
-import { setCity } from '../../../../store/slices/app-slice';
+import { citySelection } from '../../../../store/slices/app-slice';
 import { AppRoute } from '../../../../const';
 import { useAppDispatch } from '../../../../hooks/store';
 
@@ -15,7 +15,7 @@ function FavoritesList({ city, offers }: FavoritesLocationListProps) {
   const dispatch = useAppDispatch();
 
   const handleCityClick = () => {
-    dispatch(setCity(city as CityName));
+    dispatch(citySelection(city as CityName));
   };
 
   return (

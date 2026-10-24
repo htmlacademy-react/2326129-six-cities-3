@@ -36,7 +36,7 @@ const offersSlice = createSlice({
   name: 'offers',
   initialState,
   reducers: {
-    disableFavorites: (state) => {
+    favoritesDismissal: (state) => {
       state.favoriteOffers = [];
       state.offers.forEach((offer) => {
         offer.isFavorite = false;
@@ -136,5 +136,5 @@ const offersSlice = createSlice({
   },
 });
 
-export const { disableFavorites } = offersSlice.actions;
+export const { favoritesDismissal } = offersSlice.actions;
 export const offersReducer = offersSlice.reducer;

@@ -18,18 +18,18 @@ const appSlice = createSlice({
   name: 'app',
   initialState,
   reducers: {
-    setCity: (state, action: PayloadAction<CityName>) => {
+    citySelection: (state, action: PayloadAction<CityName>) => {
       state.city = action.payload;
       state.sorting = 'popular';
     },
-    setSorting: (state, action: PayloadAction<SortingOption>) => {
+    sortingSelection: (state, action: PayloadAction<SortingOption>) => {
       state.sorting = action.payload;
     },
-    setError: (state, action: PayloadAction<string | null>) => {
+    errorNotification: (state, action: PayloadAction<string | null>) => {
       state.error = action.payload;
     },
   },
 });
 
-export const { setCity, setSorting, setError } = appSlice.actions;
+export const { citySelection, sortingSelection, errorNotification } = appSlice.actions;
 export const appReducer = appSlice.reducer;

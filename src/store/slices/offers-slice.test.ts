@@ -1,4 +1,4 @@
-import { offersReducer, disableFavorites } from './offers-slice';
+import { offersReducer, favoritesDismissal } from './offers-slice';
 import {
   createMockOffer,
   createMockOfferPreview,
@@ -169,7 +169,7 @@ describe('offersSlice', () => {
       nearbyOffers: [offer],
       favoriteOffers: [offer],
     };
-    const result = offersReducer(state, disableFavorites());
+    const result = offersReducer(state, favoritesDismissal());
 
     expect(result.favoriteOffers).toHaveLength(0);
     expect(result.offers[0].isFavorite).toBe(false);

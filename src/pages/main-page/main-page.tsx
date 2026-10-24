@@ -9,7 +9,7 @@ import { useCallback, useMemo, useState } from 'react';
 import { CITY_LOCATIONS, SortingOption } from '../../const';
 import { EmptyOffersList } from './components/empty-offers-list/empty-offers-list';
 import { selectCity, selectOffers, selectSorting } from '../../store/selectors';
-import { setCity, setSorting } from '../../store/slices/app-slice';
+import { citySelection, sortingSelection } from '../../store/slices/app-slice';
 
 function MainPage(): JSX.Element {
   const dispatch = useAppDispatch();
@@ -24,11 +24,11 @@ function MainPage(): JSX.Element {
   }, []);
 
   const handleSortChange = useCallback((option: SortingOption) => {
-    dispatch(setSorting(option));
+    dispatch(sortingSelection(option));
   }, [dispatch]);
 
   const handleCityChange = useCallback((city: CityName) => {
-    dispatch(setCity(city));
+    dispatch(citySelection(city));
   }, [dispatch]);
 
   const currentOffers = useMemo(
